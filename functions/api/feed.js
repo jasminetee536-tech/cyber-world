@@ -1,1 +1,26 @@
-const KEV='https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json';const JPCERT='https://www.jpcert.or.jp/rss/jpcert.rdf';const clean=(s='')=>s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();const tag=(s,n)=>(s.match(new RegExp('<(?:[\\w-]+:)?'+n+'(?:\\s[^>]*)?>([\\s\\S]*?)<\\/(?:[\\w-]+:)?'+n+'>','i'))||[])[1]||'';export async function onRequestGet(){const errors=[],items=[];await Promise.all([(async()=>{try{const r=await fetch(KEV,{cf:{cacheTtl:900,cacheEverything:true}});if(!r.ok)throw Error('CISA '+r.status);const j=await r.json();for(const v of(j.vulnerabilities||[]).slice().sort((a,b)=>b.dateAdded.localeCompare(a.dateAdded)).slice(0,24))items.push({id:'kev-'+v.cveID,type:'kev',source:'CISA KEV',title:v.vulnerabilityName||v.cveID,date:v.dateAdded,description:v.shortDescription||'',cve:v.cveID,url:'https://www.cisa.gov/known-exploited-vulnerabilities-catalog'})}catch(e){errors.push(String(e.message))}})(),(async()=>{try{const r=await fetch(JPCERT,{cf:{cacheTtl:900,cacheEverything:true}});if(!r.ok)throw Error('JPCERT '+r.status);const xml=await r.text();for(const [i,b]of(xml.match(/<item\b[^>]*>[\s\S]*?<\/item>/gi)||[]).entries()){if(i>=20)break;const title=clean(tag(b,'title')),url=clean(tag(b,'link'));if(title&&url.startsWith('https://www.jpcert.or.jp/'))items.push({id:'jpcert-'+i,type:'advisory',source:'JPCERT/CC',title,date:clean(tag(b,'date')),description:clean(tag(b,'description')).slice(0,350),url})}}catch(e){errors.push(String(e.message))}})()]);items.sort((a,b)=>(b.date||'').localeCompare(a.date||''));return new Response(JSON.stringify({items,errors,fetchedAt:new Date().toISOString()}),{status:items.length?200:503,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=300'}})}
+const SOURCES=[
+{key:'jpcert',name:'JPCERT/CC',url:'https://www.jpcert.or.jp/rss/jpcert.rdf',host:'www.jpcert.or.jp'},
+{key:'jvn',name:'JVN（脆弱性対策情報）',url:'https://jvn.jp/rss/jvn.rdf',host:'jvn.jp'}
+];
+const decode=(s='')=>s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+const tag=(s,n)=>(s.match(new RegExp('<(?:[\\w-]+:)?'+n+'(?:\\s[^>]*)?>([\\s\\S]*?)<\\/(?:[\\w-]+:)?'+n+'>','i'))||[])[1]||'';
+function summarize(title,description){const d=description.replace(/https?:\/\/\S+/g,'').trim();if(d)return d.length>170?d.slice(0,167)+'…':d;return title+'に関する国内のセキュリティ情報です。詳細と対策は公式発表をご確認ください。'}
+export async function onRequestGet(){
+const items=[],errors=[];
+await Promise.all(SOURCES.map(async source=>{try{
+const r=await fetch(source.url,{headers:{'Accept':'application/rss+xml, application/rdf+xml, application/xml, text/xml'},cf:{cacheTtl:900,cacheEverything:true}});
+if(!r.ok)throw Error('HTTP '+r.status);
+const xml=await r.text();const blocks=xml.match(/<item\b[^>]*>[\s\S]*?<\/item>/gi)||[];
+if(!blocks.length)throw Error('RSSの記事が見つかりません');
+for(const [i,b] of blocks.entries()){
+if(i>=30)break;
+const title=decode(tag(b,'title'));const rawUrl=decode(tag(b,'link'));const description=decode(tag(b,'description'));const rawDate=decode(tag(b,'date')||tag(b,'pubDate'));
+let url;try{const u=new URL(rawUrl);if(u.protocol!=='https:'||u.hostname!==source.host)continue;url=u.href}catch{continue}
+if(!title)continue;
+const date=rawDate?rawDate.slice(0,10):'';
+items.push({id:source.key+'-'+i+'-'+url,type:'advisory',source:source.name,title,date,description:summarize(title,description),url,language:'ja',summaryType:'公式RSSの説明文を短く整理（AI要約ではありません）'});
+}
+}catch(e){errors.push(source.name+': '+String(e.message))}}));
+const unique=[...new Map(items.map(item=>[item.url,item])).values()].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,40);
+return new Response(JSON.stringify({items:unique,errors,fetchedAt:new Date().toISOString(),scope:'jp-only'}),{status:unique.length?200:503,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=300'}});
+}
