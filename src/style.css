@@ -84,3 +84,32 @@ body{background:#041323}
 @keyframes cwEarthAura{from{opacity:.7;transform:scale(.97)}to{opacity:1;transform:scale(1.035)}}
 @media(max-width:800px){.cw-home-earth,.cw-concept-earth{background:transparent!important}.cw-home-earth .map-canvas,.cw-concept-earth .map-canvas{filter:brightness(1.45) saturate(1.4) drop-shadow(0 0 18px #0bdcff55)}.cw-home-earth:before,.cw-concept-earth:before{inset:0;background:radial-gradient(ellipse at center,rgba(0,173,255,.19),transparent 67%)}}
 @media(prefers-reduced-motion:reduce){.cw-home-earth:before,.cw-concept-earth:before,.cw-home-earth:after,.cw-concept-earth:after{animation:none}}
+
+
+/* Mobile encyclopedia: four compact category cards visible in a 2 x 2 grid */
+@media(max-width:600px){
+ .cw-library-categories{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .cw-library-categories .cw-category-card{min-width:0;min-height:195px!important;padding:16px 12px!important;border-radius:12px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;justify-content:flex-start}
+ .cw-library-categories .cw-term-icon{font-size:27px!important;line-height:1.2;margin:0 0 15px!important}
+ .cw-library-categories .cw-category-card small{font-size:9px!important;line-height:1.45;letter-spacing:.3px}
+ .cw-library-categories .cw-category-card h2{font-size:15px!important;line-height:1.5;margin:10px 0 8px!important;overflow-wrap:anywhere}
+ .cw-library-categories .cw-category-card p{font-size:10px!important;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0 0 10px}
+ .cw-library-categories .cw-category-card>span:last-child{font-size:10px;margin-top:auto}
+}
+@media(max-width:365px){.cw-library-categories{gap:8px!important}.cw-library-categories .cw-category-card{padding:12px 10px!important}.cw-library-categories .cw-category-card h2{font-size:13px!important}}
+/* Concept editorial v2 */
+.cw-concept-v2 .cw-concept-hero h1{font-size:clamp(35px,4.8vw,69px);line-height:1.3}
+.cw-concept-v2 .cw-concept-hero p{font-size:15px;line-height:2;max-width:580px}
+.cw-concept-manifesto{padding:100px 6%;text-align:center;border-top:1px solid #17465f;border-bottom:1px solid #17465f;background:radial-gradient(ellipse at center,#0b30436e,transparent 70%)}
+.cw-concept-manifesto h2{font-size:clamp(30px,4vw,56px);line-height:1.5;margin:25px 0}
+.cw-concept-manifesto em{font-style:normal;color:#4cdef3}
+.cw-concept-manifesto p{max-width:720px;margin:0 auto;line-height:2.2;color:#accbd9}
+.cw-concept-pillars{padding:65px 0}
+.cw-concept-v2 .cw-concept-step{border-top:2px solid #38d6ef;border-radius:0 0 12px 12px;background:linear-gradient(160deg,#0b2c43,#081c2e);min-height:230px}
+.cw-concept-v2 .cw-concept-step p{line-height:1.9;color:#a8c8d8;font-size:13px}
+.cw-concept-statement{padding:80px 7%;border:1px solid #205c77;border-radius:20px;background:linear-gradient(110deg,#0b3048,#061b2e);position:relative;overflow:hidden}
+.cw-concept-statement:after{content:'';position:absolute;right:-80px;top:-100px;width:400px;height:400px;border:1px solid #20d6ef45;border-radius:50%;box-shadow:0 0 100px #0dc9ef18;pointer-events:none}
+.cw-concept-statement>span{font:600 11px Outfit;letter-spacing:2px;color:#52dff5}
+.cw-concept-statement h2{font-size:clamp(32px,4.2vw,58px);line-height:1.45;color:#f1fbff}
+.cw-concept-statement p{color:#9cc7d8}
+@media(max-width:760px){.cw-concept-manifesto{padding:65px 12px}.cw-concept-pillars{padding:45px 0}.cw-concept-statement{padding:50px 24px}.cw-concept-v2 .cw-concept-hero p{font-size:14px}}
