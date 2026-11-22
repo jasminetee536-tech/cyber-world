@@ -1,3 +1,4 @@
+import { onRequestGet as getDomesticFeed } from './feed.js';
 // CYBER FUTURE: evidence-led, automatically refreshed scenario briefs.
 // These are template-based editorial analyses, not AI-written forecasts or predictions of incidents.
 const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=3600'}});
@@ -24,10 +25,21 @@ export async function onRequestGet(){
  const payload=await r.json(),records=(payload.vulnerabilities||[]).map(x=>x.cve).filter(x=>x?.id&&!/Rejected/i.test(x.vulnStatus||''));
  if(!records.length)throw Error('NVDの対象データがありません');
  const total=Number(payload.totalResults||records.length),sampled=total>records.length;
+ // Correlate actual CVE identifiers across independently retrieved sources.
+ const [kevResult,jpResult]=await Promise.allSettled([
+ fetch('https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json',{cf:{cacheTtl:3600,cacheEverything:true}}).then(async r=>{if(!r.ok)throw Error('KEV HTTP '+r.status);return r.json()}),
+ getDomesticFeed().then(async r=>{if(!r.ok)throw Error('国内フィード HTTP '+r.status);return r.json()})
+ ]);
+ const kevEntries=kevResult.status==='fulfilled'?(kevResult.value.vulnerabilities||[]):[];
+ const kevById=new Map(kevEntries.map(x=>[x.cveID,x]));
+ const jpEntries=jpResult.status==='fulfilled'?(jpResult.value.items||[]):[];
+ const jpByCve=new Map();
+ for(const item of jpEntries){const ids=(item.title+' '+(item.description||'')).match(/CVE-\d{4}-\d{4,}/gi)||[];for(const id of ids){const key=id.toUpperCase();jpByCve.set(key,[...(jpByCve.get(key)||[]),{title:item.title,url:item.url,source:item.source,date:item.date}])}}
+ const sources={nvd:true,cisaKev:kevResult.status==='fulfilled',japanOfficial:jpResult.status==='fulfilled',japanOfficialItems:jpEntries.length};
  const articles=themes.map(t=>{
- const matches=records.filter(c=>t.pattern.test(english(c))),high=matches.filter(c=>score(c)!==null&&score(c)>=7),examples=matches.slice(0,5).map(c=>({id:c.id,url:'https://nvd.nist.gov/vuln/detail/'+encodeURIComponent(c.id),score:score(c),published:c.published?.slice(0,10)||''}));
- return {id:t.id,title:t.name+'：次に備えるべきリスクとは',category:'CYBER FUTURE',date:now.toISOString().slice(0,10),period:{from:start.toISOString().slice(0,10),to:now.toISOString().slice(0,10)},count:matches.length,highCount:high.length,sampled,totalRetrieved:records.length,totalAvailable:total,source:'NVD（米国NIST）',sourceUrl:'https://nvd.nist.gov/',summary:'直近7日間にNVDで公開された脆弱性情報を手がかりに、「'+t.signal+'」という観点から将来の備えを考えます。',evidence:'取得した'+records.length+'件'+(sampled?'（NVD全体の一部サンプル）':'')+'のうち、関連キーワードに一致した情報は'+matches.length+'件、CVSS 7.0以上と判定できたものは'+high.length+'件でした。キーワードによる機械分類であり、実際の攻撃件数や日本国内の発生件数ではありません。',outlook:t.future,action:t.action,examples,method:'NVD CVE APIの公開日で直近7日間を取得し、英語説明文をキーワード分類。最大200件の取得上限があり、分類には漏れや誤分類があります。未来の文章は定型シナリオであり、AIによる独立した予測ではありません。'};
+ const matches=records.filter(c=>t.pattern.test(english(c))),linked=matches.filter(c=>kevById.has(c.id)||jpByCve.has(c.id)),high=matches.filter(c=>score(c)!==null&&score(c)>=7),examples=[...linked,...matches.filter(c=>!linked.includes(c))].slice(0,7).map(c=>({id:c.id,url:'https://nvd.nist.gov/vuln/detail/'+encodeURIComponent(c.id),score:score(c),published:c.published?.slice(0,10)||'',kev:kevById.has(c.id),kevUrl:kevById.has(c.id)?'https://www.cisa.gov/known-exploited-vulnerabilities-catalog':null,japanReferences:jpByCve.get(c.id)||[]}));
+ return {id:t.id,title:t.name+'：次に備えるべきリスクとは',category:'CYBER FUTURE',date:now.toISOString().slice(0,10),period:{from:start.toISOString().slice(0,10),to:now.toISOString().slice(0,10)},count:matches.length,highCount:high.length,kevCount:matches.filter(c=>kevById.has(c.id)).length,japanMatchedCount:matches.filter(c=>jpByCve.has(c.id)).length,sampled,totalRetrieved:records.length,totalAvailable:total,source:'NVD（米国NIST）',sourceUrl:'https://nvd.nist.gov/',summary:'直近7日間にNVDで公開された脆弱性情報を手がかりに、「'+t.signal+'」という観点から将来の備えを考えます。',evidence:'取得した'+records.length+'件'+(sampled?'（NVD全体の一部サンプル）':'')+'のうち、関連キーワードに一致した情報は'+matches.length+'件、CVSS 7.0以上と判定できたものは'+high.length+'件でした。キーワードによる機械分類であり、実際の攻撃件数や日本国内の発生件数ではありません。',outlook:t.future,japanImpact:'日本への影響は、国内で当該製品やサービスを利用しているか、インターネットに公開しているか、更新や代替運用が可能かによって異なります。NVDやCISA KEVに掲載されたことだけでは、日本国内での攻撃や被害は確認できません。国内公式フィードとの同一CVE照合結果もあわせて確認してください。',correlation:'NVDで取得した関連CVEのうち、CISA KEV（悪用確認済み）に掲載されたものは'+matches.filter(c=>kevById.has(c.id)).length+'件、国内公式フィードの説明文と同じCVE番号が見つかったものは'+matches.filter(c=>jpByCve.has(c.id)).length+'件です。これらは別々の根拠であり、同一の事件を意味しません。',action:t.action,examples,method:'NVD CVE APIの公開日で直近7日間を取得し、英語説明文をキーワード分類。最大200件の取得上限があり、分類には漏れや誤分類があります。CISA KEVと国内公式フィードはCVE番号の完全一致のみで照合します。国内フィードはインシデント発生の網羅的データではありません。未来の文章は定型シナリオであり、AIによる独立した予測ではありません。'};
  }).filter(x=>x.count>0);
- return json({articles,updatedAt:now.toISOString(),status:'ok',scope:'global-nvd',notice:'NVDは世界の脆弱性データであり日本国内の攻撃観測やNIST公式予測ではありません。'});
+ return json({articles,updatedAt:now.toISOString(),status:'ok',sources,scope:'global-nvd',notice:'NVDは世界の脆弱性データであり日本国内の攻撃観測やNIST公式予測ではありません。'});
  }catch(e){return json({articles:[],status:'unavailable',error:String(e.message),notice:'外部データを取得できないため、未来予測記事を生成していません。'},503)}
 }
