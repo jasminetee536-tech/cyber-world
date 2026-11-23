@@ -1,18 +1,26 @@
 import React,{useState} from 'react';
 import './atlas.css';
 import {intelligenceReport,reportVersion} from './infrastructure-intelligence.js';
+import {infrastructureExpansion,governmentFrameworkUrl} from './infrastructure-expansion.js';
 
 const domains=[
 {id:'airport',name:'空港',icon:'✈'},
 {id:'port',name:'港湾',icon:'⚓'},
-{id:'road',name:'道路・橋梁',icon:'▰'},
+{id:'road',name:'道路・橋梁（関連分野）',icon:'▰'},
 {id:'rail',name:'鉄道',icon:'▤'},
-{id:'energy',name:'エネルギー',icon:'⚡'},
-{id:'communications',name:'通信',icon:'◎'},
+{id:'energy',name:'電力・エネルギー',icon:'⚡'},
+{id:'communications',name:'情報通信',icon:'◎'},
 {id:'water',name:'水道・治水',icon:'◈'},
 {id:'medical',name:'医療',icon:'✚'},
 {id:'logistics',name:'物流',icon:'▣'},
-{id:'government',name:'行政・防災',icon:'▥'}
+{id:'government',name:'行政サービス',icon:'▥'},
+{id:'finance',name:'金融',icon:'¥'},
+{id:'aviation',name:'航空',icon:'✈'},
+{id:'gas',name:'ガス',icon:'♨'},
+{id:'chemicals',name:'化学',icon:'◇'},
+{id:'credit',name:'クレジット',icon:'▣'},
+{id:'oil',name:'石油',icon:'◉'},
+{id:'postal',name:'郵便',icon:'✉'}
 ];
 const sites=[
 ['airport','成田国際空港','千葉県',35.77,140.39,'日本の国際旅客・航空貨物を支える主要空港。','運航支援・予約・手荷物などの情報システム障害、委託先経由の侵害。','国際便の遅延、航空貨物の滞留、関連交通への波及。'],
@@ -60,7 +68,7 @@ const additionalSites=[
 ['road','関門橋','山口県・福岡県','本州と九州を結ぶ道路交通の重要経路。','道路交通情報や運営支援サービスの停止。','広域物流と迂回路への負荷。'],
 ['road','明石海峡大橋','兵庫県','本州と淡路島を結ぶ道路ネットワークの要所。','交通情報・料金収受・運用支援サービスの障害。','地域間物流や交通計画への影響。']
 ].map((s,i)=>({id:sites.length+i,domain:s[0],name:s[1],region:s[2],importance:s[3],risk:s[4],impact:s[5]}));
-const allSites=[...sites,...additionalSites];
+const allSites=[...sites,...additionalSites,...infrastructureExpansion];
 const imageByDomain={
  airport:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80',
  port:'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=900&q=80',
@@ -71,7 +79,14 @@ const imageByDomain={
  water:'https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=900&q=80',
  medical:'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=900&q=80',
  logistics:'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80',
- government:'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=900&q=80'
+ government:'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=900&q=80',
+ finance:'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=900&q=80',
+ aviation:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80',
+ gas:'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=900&q=80',
+ chemicals:'https://images.unsplash.com/photo-1532094349884-543bc11b2340?auto=format&fit=crop&w=900&q=80',
+ credit:'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80',
+ oil:'https://images.unsplash.com/photo-1516939884455-1445c8652f83?auto=format&fit=crop&w=900&q=80',
+ postal:'https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=900&q=80'
 };
 const scoreAxes=[{id:'impact',label:'社会的影響',weight:30},{id:'substitution',label:'代替の難しさ',weight:20},{id:'cascade',label:'分野間の波及',weight:20},{id:'digital',label:'デジタル依存度',weight:15},{id:'recovery',label:'復旧の複雑さ',weight:15}];
 // Editorial facility-level estimates, not audited security findings. Values are reviewed per named site.
@@ -87,13 +102,13 @@ const facilityRatings=[
 [5,4,5,3,4],[4,4,4,3,4]
 ];
 const sitePhotos=["photo-1436491865332-7a61a109cc05","photo-1506947411487-a56738267384","photo-1474302770737-173ee21bab63","photo-1578575437130-527eed3abbec","photo-1494412519320-aa613dfb7738","photo-1586528116311-ad8dd3c8310d","photo-1500534623283-312aade485b7","photo-1519501025264-65ba15a82390","photo-1449965408869-eaa3f722e40d","photo-1474487548417-781cb71495f3","photo-1515165562835-c4c4b5a4c13e","photo-1473341304170-971dccb5ac1e","photo-1497435334941-8c899ee9e8e9","photo-1558494949-ef010cbdcc31","photo-1544197150-b99a580bb7a8","photo-1437482078695-73f5ca6c96e2","photo-1551076805-e1869033e561","photo-1565793298595-6ba897b80b3d","photo-1487958449943-2429e8be8625","photo-1446776811953-b23d57bd21aa","photo-1464037866556-6812c9d1c72e","photo-1488085061387-422e29b40080","photo-1534274988757-a28bf1a57c17","photo-1527631746610-bca00a040d60","photo-1519681393784-d120267933ba","photo-1529070538774-1843cb3265df","photo-1451187580459-43490279c0fa","photo-1509391366360-2e959784a276","photo-1516939884455-1445c8652f83","photo-1518770660439-4636190af475","photo-1516321318423-f06f85e504b3","photo-1501785888041-af3ef285b470","photo-1470770841072-f978cf4d019e","photo-1538108149393-fbbd81895907","photo-1519494026892-80bbd2d6fd0d","photo-1566576912321-d58ddd7a6088","photo-1497366754035-f200968a6e72","photo-1527576539890-dfa815648363","photo-1521737711867-e3b97375f902","photo-1473448912268-2022ce9509d8","photo-1500530855697-b586d89ba3ee"];
-function photoFor(site){return 'https://images.unsplash.com/'+sitePhotos[site.id]+'?auto=format&fit=crop&w=1100&q=82&sig='+site.id;}
+function photoFor(site){return sitePhotos[site.id]?'https://images.unsplash.com/'+sitePhotos[site.id]+'?auto=format&fit=crop&w=1100&q=82&sig='+site.id:imageByDomain[site.domain]||imageByDomain.government;}
 const infrastructureLevels=[['CRITICAL','85–100','国家規模の基幹機能に代替困難な停止が連鎖する、極めて例外的な重要度'],['HIGH','70–84','広域の生活・産業に大きく影響し、代替や復旧が難しい'],['MEDIUM','50–69','地域・分野にとって重要だが、影響範囲や代替手段に一定の限定がある'],['LOW','30–49','主に局所的な影響が想定され、代替手段が比較的確保しやすい'],['MINIMAL','0–29','社会的影響が限定的と評価できる場合']];
 const infrastructureLevel=score=>score>=85?'CRITICAL':score>=70?'HIGH':score>=50?'MEDIUM':score>=30?'LOW':'MINIMAL';
 // Reserve extreme scores for independently supported, cross-sector systemic importance.
 const calibratedInfrastructureScore=raw=>Math.round(100*Math.pow(raw/100,1.7));
 function assess(site){
- const values=facilityRatings[site.id]||[3,3,3,3,3];
+ const values=facilityRatings[site.id]||[3,2,3,3,3];
  const axes=scoreAxes.map((axis,i)=>({...axis,value:values[i]}));
  return {axes,score:calibratedInfrastructureScore(axes.reduce((total,a)=>total+a.weight*a.value/5,0)),confidence:'D',method:'拠点別の編集上の暫定推定'};
 }
@@ -116,15 +131,15 @@ export default function InfrastructureAtlas(){
  const active=allSites.find(s=>s.id===selected);
  const profile=active?assess(active):null;
  return <section className="atlas atlas-directory">
- <header className="atlas-directory-hero"><div><span className="cw-kicker">CYBER WORLD / INFRASTRUCTURE INTELLIGENCE</span><h2>日本の重要インフラ</h2><p>社会を支える拠点と、その重要性を読み解く。</p></div><div className="atlas-directory-stats"><span><b>{allSites.length}</b>収録対象</span><span><b>{domains.length}</b>分野</span><span><b>5</b>評価軸</span></div></header>
- <div className="atlas-method-strip"><strong>CWRI-IC</strong><span>社会的重要度の参考評価 / 100点（最高評価は例外的）</span><button type="button" onClick={()=>setSelected(-1)}>評価方法 ↗</button></div>
+ <header className="atlas-directory-hero"><div><span className="cw-kicker">CYBER WORLD / INFRASTRUCTURE INTELLIGENCE</span><h2>日本の重要インフラ</h2><p>政府の重要インフラ16分野を軸に、公開情報から社会を支える拠点・サービスを読み解く。</p></div><div className="atlas-directory-stats"><span><b>{allSites.length}</b>収録対象</span><span><b>16</b>政府指定分野 + 関連分野</span><span><b>5</b>評価軸</span></div></header>
+ <p className="atlas-government-context">分類の基準：<a href={governmentFrameworkUrl} target="_blank" rel="noopener noreferrer">国家サイバー統括室「重要インフラ対策」 ↗</a>（2026年10月施行の16分野）。道路・治水等は関連する公共基盤として追加。掲載施設・地域はCYBER WORLDが選んだ分析例であり、政府による個別施設の指定一覧ではありません。</p><div className="atlas-method-strip"><strong>CWRI-IC</strong><span>社会的重要度の参考評価 / 100点（最高評価は例外的）</span><button type="button" onClick={()=>setSelected(-1)}>評価方法 ↗</button></div>
  <div className="atlas-directory-controls"><label className="atlas-directory-search"><span>⌕</span><input type="search" aria-label="施設・地域を検索" placeholder="施設・地域を検索" value={query} onChange={e=>{setQuery(e.target.value);setExpanded(false)}}/></label><select aria-label="並び替え" value={sort} onChange={e=>setSort(e.target.value)}><option value="score">重要度順</option><option value="name">名称順</option><option value="region">地域順</option></select></div>
  <nav className="atlas-directory-domains" aria-label="分野を選択">{domains.map(d=><button key={d.id} className={domain===d.id?'active':''} onClick={()=>{setDomain(d.id);setExpanded(false)}}><span>{d.icon}</span>{d.name} <small>{allSites.filter(s=>s.domain===d.id).length}</small></button>)}<button className={domain==='all'?'active':''} onClick={()=>{setDomain('all');setExpanded(false)}}><span>▦</span>すべて <small>{allSites.length}</small></button></nav>
  <div className="atlas-directory-count"><strong>重要拠点一覧</strong><small>{filtered.length}件</small></div>
- <div className="atlas-directory-grid">{shown.map(s=>{const a=assess(s);return <button className="atlas-directory-card" type="button" key={s.id} onClick={()=>setSelected(s.id)}><div className="atlas-directory-photo"><img src={photoFor(s)} alt={s.name+'に関連する写真'} loading="lazy" referrerPolicy="no-referrer" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=imageByDomain[s.domain]}}/></div><div className="atlas-directory-info"><div className="atlas-directory-meta">{domains.find(d=>d.id===s.domain)?.name} / {s.region}</div><h3>{s.name}</h3><p>{s.importance}</p><div className="atlas-directory-bottom"><span>暫定評価・信頼度D</span><strong>{a.score}<small>/100 · {infrastructureLevel(a.score)}</small></strong></div></div></button>})}</div>
+ <div className="atlas-directory-grid">{shown.map(s=>{const a=assess(s);return <button className="atlas-directory-card" type="button" key={s.id} onClick={()=>setSelected(s.id)}><div className="atlas-directory-photo"><img src={photoFor(s)} alt={s.name+'に関連する写真'} loading="lazy" referrerPolicy="no-referrer" onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=imageByDomain[s.domain]}}/></div><div className="atlas-directory-info"><div className="atlas-directory-meta">{domains.find(d=>d.id===s.domain)?.name} / {s.region}</div><h3>{s.name}</h3><p>{s.importance}</p>{s.recordType&&<small className="atlas-record-type">{s.recordType}</small>}<div className="atlas-directory-bottom"><span>暫定評価・信頼度D</span><strong>{a.score}<small>/100 · {infrastructureLevel(a.score)}</small></strong></div></div></button>})}</div>
  {!filtered.length&&<p className="atlas-directory-empty">該当する拠点はありません。検索条件を変更してください。</p>}
  {filtered.length>8&&<button className="atlas-directory-more" type="button" onClick={()=>setExpanded(v=>!v)}>{expanded?'最初の8件に戻す':'さらに '+(filtered.length-8)+' 件を表示 ↓'}</button>}
  <p className="atlas-directory-caveat">CWRI-ICは独自の社会的重要度指標です。実際の脆弱性・侵害確率・個別施設の安全性を測定するものではありません。現時点の点数は分野別の暫定推定で、個別検証が不足しています。</p>
- {(active||selected===-1)&&<div className="atlas-modal-backdrop" onClick={()=>setSelected(null)}><article className="atlas-profile" role="dialog" aria-modal="true" aria-label={active?active.name+'の分析':'評価方法'} onClick={e=>e.stopPropagation()}><button className="atlas-profile-close" type="button" onClick={()=>setSelected(null)} aria-label="閉じる">×</button>{active?<><div className="atlas-profile-image"><img src={photoFor(active)} alt={active.name+'に関連する分野の参考イメージ'} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=imageByDomain[active.domain]}} /></div><div className="atlas-profile-content"><span className="cw-kicker">{reportVersion}</span><h2>{active.name}</h2><p className="atlas-profile-region">{active.region} / {domains.find(d=>d.id===active.domain)?.name}</p><div className="atlas-profile-score"><div><small>CWRI-IC / 暫定社会的重要度</small><strong>{profile.score}<small>/100</small></strong><span>{infrastructureLevel(profile.score)}</span><span>信頼度D・個別根拠未検証</span></div><div>{profile.axes.map(a=><div className="atlas-axis" key={a.id}><span>{a.label}</span><meter min="0" max="5" value={a.value}/><b>{a.value}/5</b></div>)}</div></div><div className="atlas-level-inline">{infrastructureLevels.map(([name,range])=><span className={'atlas-level-'+name.toLowerCase()} key={name}>{name} {range}</span>)}</div><p className="atlas-profile-warning">このスコアは施設の危険性やサイバー攻撃の成功確率ではありません。拠点の役割に関する編集上の仮定に基づく暫定値です。</p>{intelligenceReport(active,profile).map((part,i)=><section key={i}><h3>{String(i+1).padStart(2,'0')} / {part.title}</h3><p>{part.body}</p></section>)}<div className="atlas-profile-sources"><h3>調査・参照先</h3><p>個別施設に関する一次資料の照合は未完了です。各記事は分野別の分析枠組みに対象施設の公開概要を当てはめた長文の暫定版です。以下は分野横断的な評価枠組みの参照先であり、施設固有の評価を裏付けるものではありません。</p><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noreferrer">NIST Cybersecurity Framework 2.0</a><a href="https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience" target="_blank" rel="noreferrer">CISA Critical Infrastructure Security & Resilience</a><a href="https://www.nisc.go.jp/" target="_blank" rel="noreferrer">NISC 内閣サイバーセキュリティセンター</a></div></div></>:<div className="atlas-profile-content"><span className="cw-kicker">METHODOLOGY / CWRI-IC v0.1</span><h2>評価方法と限界</h2><p>世界のサイバーリスク・レジリエンスの考え方を参考にした、CYBER WORLD独自の参考指標です。国際機関の認定や公式スコアではありません。</p>{scoreAxes.map(a=><section key={a.id}><h3>{a.label} / {a.weight}%</h3><p>各分野の一般的な依存関係を1〜5の尺度で暫定評価。実施設の監査・公開資料による個別検証は未完了です。</p></section>)}<p>計算式：各軸の（0〜5の評価 ÷ 5）× 重みを合計して原点を算出し、100×（原点/100）の1.7乗で補正します。中程度の事象が高得点に集中することを避け、85点以上は極めて例外的な社会的重要度とします。現在の評価は拠点別の暫定仮定であり、確定的な危険度順位ではありません。</p><section><h3>スコアレベルの定義</h3><div className="atlas-level-guide">{infrastructureLevels.map(([name,range,description])=><div className={'atlas-level-'+name.toLowerCase()} key={name}><b>{name}</b><strong>{range}</strong><span>{description}</span></div>)}</div></section></div>}</article></div>}
+ {(active||selected===-1)&&<div className="atlas-modal-backdrop" onClick={()=>setSelected(null)}><article className="atlas-profile" role="dialog" aria-modal="true" aria-label={active?active.name+'の分析':'評価方法'} onClick={e=>e.stopPropagation()}><button className="atlas-profile-close" type="button" onClick={()=>setSelected(null)} aria-label="閉じる">×</button>{active?<><div className="atlas-profile-image"><img src={photoFor(active)} alt={active.name+'に関連する分野の参考イメージ'} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src=imageByDomain[active.domain]}} /></div><div className="atlas-profile-content"><span className="cw-kicker">{reportVersion}</span><h2>{active.name}</h2><p className="atlas-profile-region">{active.region} / {domains.find(d=>d.id===active.domain)?.name}</p>{active.recordType&&<p className="atlas-record-type">{active.recordType} / 編集部選定・政府個別指定の確認ではありません</p>}<div className="atlas-profile-score"><div><small>CWRI-IC / 暫定社会的重要度</small><strong>{profile.score}<small>/100</small></strong><span>{infrastructureLevel(profile.score)}</span><span>信頼度D・個別根拠未検証</span></div><div>{profile.axes.map(a=><div className="atlas-axis" key={a.id}><span>{a.label}</span><meter min="0" max="5" value={a.value}/><b>{a.value}/5</b></div>)}</div></div><div className="atlas-level-inline">{infrastructureLevels.map(([name,range])=><span className={'atlas-level-'+name.toLowerCase()} key={name}>{name} {range}</span>)}</div><p className="atlas-profile-warning">このスコアは施設の危険性やサイバー攻撃の成功確率ではありません。拠点の役割に関する編集上の仮定に基づく暫定値です。</p>{intelligenceReport(active,profile).map((part,i)=><section key={i}><h3>{String(i+1).padStart(2,'0')} / {part.title}</h3><p>{part.body}</p></section>)}<div className="atlas-profile-sources"><h3>調査・参照先</h3><p>個別施設に関する一次資料の照合は未完了です。各記事は分野別の分析枠組みに対象施設の公開概要を当てはめた長文の暫定版です。政府の16分野は分類の参考であり、個々の掲載対象が政府指定施設であることを意味しません。以下は分野横断的な評価枠組みの参照先であり、施設固有の評価を裏付けるものではありません。</p><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noreferrer">NIST Cybersecurity Framework 2.0</a><a href="https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience" target="_blank" rel="noreferrer">CISA Critical Infrastructure Security & Resilience</a><a href={governmentFrameworkUrl} target="_blank" rel="noreferrer">国家サイバー統括室：重要インフラ16分野の公式定義</a></div></div></>:<div className="atlas-profile-content"><span className="cw-kicker">METHODOLOGY / CWRI-IC v0.1</span><h2>評価方法と限界</h2><p>世界のサイバーリスク・レジリエンスの考え方を参考にした、CYBER WORLD独自の参考指標です。国際機関の認定や公式スコアではありません。</p>{scoreAxes.map(a=><section key={a.id}><h3>{a.label} / {a.weight}%</h3><p>各分野の一般的な依存関係を1〜5の尺度で暫定評価。実施設の監査・公開資料による個別検証は未完了です。</p></section>)}<p>計算式：各軸の（0〜5の評価 ÷ 5）× 重みを合計して原点を算出し、100×（原点/100）の1.7乗で補正します。中程度の事象が高得点に集中することを避け、85点以上は極めて例外的な社会的重要度とします。現在の評価は拠点別の暫定仮定であり、確定的な危険度順位ではありません。</p><section><h3>スコアレベルの定義</h3><div className="atlas-level-guide">{infrastructureLevels.map(([name,range,description])=><div className={'atlas-level-'+name.toLowerCase()} key={name}><b>{name}</b><strong>{range}</strong><span>{description}</span></div>)}</div></section></div>}</article></div>}
  </section>;
 }
