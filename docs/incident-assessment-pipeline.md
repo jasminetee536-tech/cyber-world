@@ -33,3 +33,11 @@ The example is only a schema illustration. Do not submit fabricated evidence, sc
 - Research matching only works for explicit CVE IDs; many historical incidents lack CVEs and require dedicated incident-specific investigation.
 - HTTPS URL format and text length are validated, but the server does not independently fetch or verify the cited pages. Human verification is essential.
 - D1 and deployment have not been verified. Without D1, the queue operates read-only and the UI continues to show the 15 previously scored incidents.
+
+## AI provisional proposal pipeline (2026-11-23)
+- `functions/api/incident-ai.js` optionally runs Workers AI daily (maximum five candidate incidents per run), only where an incident has a directly linked official-source HTTPS URL. Generic CSIS timeline links do not qualify.
+- `GET /api/incidents/proposals` lists proposals. Proposals have `status: AI暫定提案・未検証` and confidence D and **do not change public CWRI scores**.
+- Requires Cloudflare Workers AI binding `AI`, D1 `CWRI_DB`, and `migrations/0006_incident_proposals.sql`. Bindings and migrations are NOT configured by GitHub commits.
+- Automated evidence checking is limited: fetched page text and model output may be misleading, and URL format does not establish source credibility. Editors must verify evidence and approve through authenticated assessment API.
+- Most of the 105 draft incidents have only a generic CSIS timeline URL, so this implementation cannot automatically score them. Dedicated official source mapping and fact-checking remain necessary.
+- No Workers AI execution, build, CI success, database migration, or production deployment has been verified.
