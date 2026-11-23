@@ -40,6 +40,35 @@ export async function persistCWRI(env){
  await env.CWRI_DB.prepare('INSERT OR IGNORE INTO cwri_snapshots (day, payload, recorded_at) VALUES (?, ?, ?)').bind(snapshot.updatedAt.slice(0,10),JSON.stringify(snapshot),snapshot.updatedAt).run();
  return {status:'stored',day:snapshot.updatedAt.slice(0,10)};
 }
+// Review previously observed signals against today's source snapshot.
+// Changes in KEV metadata are recorded; they are not proof of incident resolution.
+export async function reviewCWRI(env){
+ if(!env.CWRI_DB)return {status:'not_configured'};
+ const current=await collectCWRI();
+ const today=current.updatedAt.slice(0,10);
+ const previous=await env.CWRI_DB.prepare('SELECT day,payload FROM cwri_snapshots WHERE day <= ? ORDER BY day DESC LIMIT 1').bind(new Date(Date.now()-7*86400000).toISOString().slice(0,10)).first();
+ const month=await env.CWRI_DB.prepare('SELECT day,payload FROM cwri_snapshots WHERE day <= ? ORDER BY day DESC LIMIT 1').bind(new Date(Date.now()-30*86400000).toISOString().slice(0,10)).first();
+ const results=[];
+ for(const [windowDays,old] of [[7,previous],[30,month]]){
+  if(!old)continue;
+  const past=JSON.parse(old.payload),oldMap=new Map((past.signals||[]).map(x=>[x.id,x]));
+  for(const now of current.signals){
+   const before=oldMap.get(now.id);if(!before)continue;
+   const changed=before.level!==now.level||before.ransomwareConfirmed!==now.ransomwareConfirmed;
+   results.push({day:today,windowDays,cve:now.id,baselineDay:old.day,previousLevel:before.level,currentLevel:now.level,changed,reason:changed?'KEVメタデータに変化':'取得できた公開情報に変化なし',sourceUrl:now.sourceUrl});
+  }
+ }
+ const stmt=env.CWRI_DB.prepare('INSERT OR REPLACE INTO cwri_reviews (day,window_days,cve,baseline_day,previous_level,current_level,changed,reason,source_url) VALUES (?,?,?,?,?,?,?,?,?)');
+ for(const x of results)await stmt.bind(x.day,x.windowDays,x.cve,x.baselineDay,x.previousLevel,x.currentLevel,x.changed?1:0,x.reason,x.sourceUrl).run();
+ return {status:'ok',reviewed:results.length,changed:results.filter(x=>x.changed).length};
+}
+export async function reviewsGet(request,env){
+ if(!env.CWRI_DB)return json({status:'not_configured',reviews:[]});
+ try{
+ const rows=await env.CWRI_DB.prepare('SELECT * FROM cwri_reviews ORDER BY day DESC LIMIT 100').all();
+ return json({status:'ok',reviews:rows.results||[]});
+ }catch{return json({status:'error',reviews:[]},503)}
+}
 export async function historyGet(request,env){
  if(!env.CWRI_DB)return json({status:'not_configured',snapshots:[],message:'D1 database is not configured'});
  const days=Math.min(60,Math.max(1,Number(new URL(request.url).searchParams.get('days'))||30));
