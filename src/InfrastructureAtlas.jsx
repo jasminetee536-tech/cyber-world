@@ -38,7 +38,7 @@ const sites=[
 ].map((s,i)=>({id:i,domain:s[0],name:s[1],region:s[2],lat:s[3],lng:s[4],importance:s[5],risk:s[6],impact:s[7]}));
 function JapanMap({items,selected,onSelect}){
  const node=useRef(null),map=useRef(null),layer=useRef(null);
- useEffect(()=>{if(!node.current||map.current)return;const m=L.map(node.current,{zoomControl:true,scrollWheelZoom:false}).setView([37.5,137.3],5);L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap contributors &copy; CARTO',maxZoom:18}).addTo(m);map.current=m;layer.current=L.layerGroup().addTo(m);setTimeout(()=>m.invalidateSize(),150);return()=>{m.remove();map.current=null}},[]);
+ useEffect(()=>{if(!node.current||map.current)return;const m=L.map(node.current,{zoomControl:true,scrollWheelZoom:false}).setView([37.5,137.3],5);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:18}).addTo(m);map.current=m;layer.current=L.layerGroup().addTo(m);setTimeout(()=>m.invalidateSize(),150);return()=>{m.remove();map.current=null}},[]);
  useEffect(()=>{if(!map.current||!layer.current)return;layer.current.clearLayers();items.forEach(s=>{const active=selected?.id===s.id;L.circleMarker([s.lat,s.lng],{radius:active?10:7,color:active?'#ffcc74':'#8ceeff',weight:2,fillColor:active?'#ffad38':'#0cd6ff',fillOpacity:.85}).addTo(layer.current).bindTooltip(s.name).on('click',()=>onSelect(s))})},[items,selected,onSelect]);
  useEffect(()=>{if(selected&&map.current)map.current.flyTo([selected.lat,selected.lng],Math.max(map.current.getZoom(),7),{duration:.65})},[selected?.id]);
  return <div ref={node} className="atlas-map" aria-label="日本の重要インフラ地図"/>;
