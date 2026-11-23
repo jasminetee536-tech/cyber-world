@@ -134,3 +134,27 @@
 .tm-japan-detail{padding:14px;margin:15px 0;border-left:3px solid #46c5dd;background:rgba(28,103,126,.15)}
 .tm-japan-detail strong{color:#79e4ef}.tm-japan-detail p{font-size:13px;line-height:1.8;margin:6px 0 0}
 @media(max-width:520px){.tm-mission{padding:12px}.tm-mission strong{font-size:14px}.tm-japan-note{display:block}.tm-japan-note b{display:block;margin-bottom:4px}}
+
+/* Responsive editorial cards: preserve readable copy and avoid clipped Japan analysis. */
+.tm-event{align-items:stretch}
+.tm-event-body{display:flex;flex-direction:column;gap:9px;min-width:0}
+.tm-event-heading{align-items:flex-start;gap:14px}
+.tm-event-heading h3{margin:0;overflow-wrap:anywhere}
+.tm-event-body>p{margin:0;overflow-wrap:anywhere}
+.tm-event-body>.tm-japan-note{display:block!important;overflow:visible!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;line-height:1.75!important;margin:2px 0 0!important}
+.tm-event-body>.tm-japan-note b{display:block;margin-bottom:4px;white-space:normal}
+.tm-event-body>button{align-self:flex-start;margin-top:auto;padding:7px 0;font-weight:700}
+.tm-event>img{display:block;object-position:center}
+@media(max-width:700px){
+ .tm-event{display:flex;flex-direction:column;min-height:0;border-radius:16px}
+ .tm-event>img{width:100%;height:150px;min-height:0;max-height:150px;object-fit:cover}
+ .tm-event-body{padding:16px;gap:11px}
+ .tm-event-heading{gap:12px;align-items:flex-start}
+ .tm-event-heading h3{font-size:clamp(16px,4vw,19px);line-height:1.55;margin:0}
+ .tm-event-body>p:not(.tm-japan-note){font-size:13px;line-height:1.75;display:block;overflow:visible;-webkit-line-clamp:unset}
+ .tm-event-body>.tm-japan-note{font-size:12px!important;padding:12px 13px}
+ .tm-event .tm-score-ring{width:54px;height:54px}
+ .tm-event .tm-score-ring .tm-score-inner strong{font-size:20px}
+ .tm-event-body>button{font-size:13px;margin-top:2px}
+}
+@media(max-width:390px){.tm-event>img{height:125px;max-height:125px}.tm-event-body{padding:13px}.tm-event-heading h3{font-size:16px}}
