@@ -1,5 +1,6 @@
 import {incidentAxes,annualAxes,weightedScore} from './cwri.js';
 import {expandedIncidents} from './incident-expansion.js';
+import {followupAssessments} from './incident-followups.js';
 // Curated, preliminary editorial assessments. They are NOT official scores.
 // Scores are withheld for records without independently verified evidence.
 const raw=[
@@ -30,7 +31,14 @@ const editorialSections=[
 '【将来への示唆】この事案が示すのは、ひとつの侵害が複数の業務へ波及し得るという構造的な問題です。ただし将来の発生頻度や具体的な被害を予言するものではありません。対策の実効性は訓練と実測で確かめる必要があります。'
 ];
 const initialWithDetails=initialIncidents.map(e=>({...e,detail:'【事件の概要】'+e.summary+'\\n\\n【教訓】'+e.lesson+'\\n\\n'+editorialSections.join('\\n\\n')+'\\n\\n【CYBER WORLDの分析】'+e.title+'を単独の技術的問題ではなく、認証・運用・復旧・社会機能のつながりから検討します。個別事実の追加確認と出典照合が必要な編集草稿です。'}));
-export const incidents=[...initialWithDetails,...expandedIncidents].sort((a,b)=>b.year-a.year||a.title.localeCompare(b.title,'ja'));
+const followupIndex=new Map(followupAssessments.map(x=>[x.year+'|'+x.title,x]));
+export const incidents=[...initialWithDetails,...expandedIncidents].map(e=>{
+ const followup=followupIndex.get(e.year+'|'+e.title);
+ if(!followup)return {...e,followupStatus:e.score==null?'要一次資料照合':'暫定採点済み・追加照合待ち'};
+ const score=weightedScore(incidentAxes,followup.ratings);
+ return {...e,score,ratings:followup.ratings,confidence:followup.confidence,sourceUrls:followup.evidence.map(x=>x.url),evidence:followup.evidence,assessmentRationale:followup.rationale,assessedAt:'2026-11-23',status:'根拠付き暫定採点・独立査読前',followupStatus:'一次・公的資料による追跡評価済み',reviewHistory:[...(e.reviewHistory||[]),{date:'2026-11-23',score,reason:'公的資料を照合したCWRI暫定再評価。'+followup.rationale}]};
+}).sort((a,b)=>b.year-a.year||a.title.localeCompare(b.title,'ja'));
+export const incidentFollowupSummary={total:incidents.length,scored:incidents.filter(x=>x.score!=null).length,pending:incidents.filter(x=>x.score==null).length,reviewed:followupAssessments.length};
 export function annualSummary(year){
  const list=incidents.filter(x=>x.year===Number(year));
  if(!list.length)return {count:0,score:null,summary:'収録事件がないため評価できません。未収録は事件がなかったことを意味しません。'};
