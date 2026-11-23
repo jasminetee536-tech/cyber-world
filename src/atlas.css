@@ -185,3 +185,5 @@
 .atlas-axis meter{min-width:0}
 @media(max-width:760px){.atlas-modal-backdrop{padding:10px;align-items:center}.atlas-profile{max-height:calc(100dvh - 20px)}.atlas-profile-image{height:165px}.atlas-profile-content{padding:18px}.atlas-directory-domains{gap:6px}.atlas-directory-domains button{font-size:11px;min-height:76px;padding:8px 2px}.atlas-directory-domains button span{font-size:19px}}
 @media(max-width:390px){.atlas-directory-domains button{font-size:10px}.atlas-directory-domains button small{font-size:9px}}
+
+.atlas-directory-photo>span,.atlas-profile-image>span{display:none!important}
