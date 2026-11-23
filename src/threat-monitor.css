@@ -116,3 +116,13 @@
 .tm-level-guide b,.tm-level-guide strong{color:var(--severity)}
 .tm-level-guide span{color:#bdd4df;line-height:1.5}
 @media(max-width:600px){.tm-level-guide>div{grid-template-columns:75px 50px 1fr;gap:6px;font-size:10px}.tm-kpis .tm-period-kpi{padding:9px 6px}.tm-period-kpi .tm-open-detail{font-size:8px}}
+
+/* Scoring definition: hypothetical scenario reference ranges */
+.tm-scenario-guide{display:grid;gap:10px;margin:14px 0}
+.tm-scenario-guide>div{display:grid;grid-template-columns:70px minmax(0,1fr);gap:12px;align-items:start;padding:12px;border:1px solid #28556a;border-radius:10px;background:linear-gradient(125deg,#0c2c40,#071e30)}
+.tm-scenario-guide>div>strong{font-size:14px;color:#66e5f4;white-space:nowrap}
+.tm-scenario-guide>div>div{display:grid;gap:5px}
+.tm-scenario-guide b{font-size:13px;color:#f1faff}
+.tm-scenario-guide span{font-size:12px;line-height:1.75;color:#aac8d7}
+.tm-scenario-guide>p{font-size:12px;line-height:1.8}
+@media(max-width:480px){.tm-scenario-guide>div{grid-template-columns:60px minmax(0,1fr);gap:9px;padding:10px}.tm-scenario-guide>div>strong{font-size:12px}}
