@@ -395,3 +395,13 @@ body{background:#041323}
  .cw-library-collection .cw-library-article{padding:12px}
  .cw-library-collection .cw-library-article h3{font-size:15px}
 }
+
+
+/* Editorial-grade encyclopedia search: quiet, compact, no instructional callout */
+.cw-library-find-minimal{display:flex;align-items:center;gap:9px;max-width:640px;padding:0 13px;margin:2px 0 20px;border:1px solid #31536a;border-radius:9px;background:#071b2b;box-shadow:none}
+.cw-library-find-minimal:focus-within{border-color:#45cce4}
+.cw-library-find-minimal .cw-library-search-icon{font-size:23px;line-height:1;color:#6ba6bd;font-weight:400;white-space:nowrap}
+.cw-library-find-minimal input{flex:1;min-width:0;width:auto;border:0;background:transparent;padding:12px 0;font-size:13px;color:#eaf9ff;outline:0}
+.cw-library-find-minimal input::placeholder{color:#8aabbc}
+.cw-library-search-clear{background:transparent;border:0;color:#a5c6d6;font-size:21px;cursor:pointer;padding:3px 6px}
+@media(max-width:700px){.cw-library-find-minimal{margin:0 0 13px;padding:0 11px}.cw-library-find-minimal input{padding:10px 0;font-size:12px}}
