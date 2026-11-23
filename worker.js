@@ -3,15 +3,17 @@ import { onRequestGet as futureGet } from './functions/api/future.js';
 import {shadowGet,buildDaily} from './functions/api/shadow.js';
 import {cwriGet,historyGet,persistCWRI,reviewCWRI,reviewsGet} from './functions/api/cwri.js';
 import {incidentQueueGet,incidentAssessmentPost,incidentAssessmentsGet} from './functions/api/incident-review.js';
+import {refreshIncidentResearch,incidentResearchGet} from './functions/api/incident-research.js';
 
 export default {
-  async scheduled(event, env, ctx) { ctx.waitUntil(Promise.allSettled([buildDaily(env),persistCWRI(env).then(()=>reviewCWRI(env))])); },
+  async scheduled(event, env, ctx) { ctx.waitUntil(Promise.allSettled([buildDaily(env),persistCWRI(env).then(()=>reviewCWRI(env)),refreshIncidentResearch(env)])); },
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === '/api/feed' && request.method === 'GET') {
       return onRequestGet();
     }
     if (url.pathname === '/api/future' && request.method === 'GET') return futureGet();
+    if (url.pathname === '/api/incidents/research' && request.method === 'GET') return incidentResearchGet(request,env);
     if (url.pathname === '/api/incidents/queue' && request.method === 'GET') return incidentQueueGet(request,env);
     if (url.pathname === '/api/incidents/assessments' && request.method === 'GET') return incidentAssessmentsGet(request,env);
     if (url.pathname === '/api/incidents/assessments' && request.method === 'POST') return incidentAssessmentPost(request,env);
