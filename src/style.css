@@ -113,3 +113,7 @@ body{background:#041323}
 .cw-concept-statement h2{font-size:clamp(32px,4.2vw,58px);line-height:1.45;color:#f1fbff}
 .cw-concept-statement p{color:#9cc7d8}
 @media(max-width:760px){.cw-concept-manifesto{padding:65px 12px}.cw-concept-pillars{padding:45px 0}.cw-concept-statement{padding:50px 24px}.cw-concept-v2 .cw-concept-hero p{font-size:14px}}
+
+/* Keep navigation accessible while browsing long encyclopedia pages */
+.cw-sticky-header{position:sticky;top:0;z-index:1000;backdrop-filter:blur(14px);background:rgba(3,14,28,.94)}
+@media(max-width:700px){.cw-sticky-header{min-height:54px;height:auto}}
