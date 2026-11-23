@@ -1,4 +1,4 @@
-export const threatWatchArticles = [
+const rawThreatWatchArticles = [
   {
     "id": "watch-202611-0",
     "title": "VMware vCenterの認証回避脆弱性、実際の攻撃で悪用",
@@ -610,3 +610,8 @@ export const threatWatchArticles = [
     ]
   }
 ];
+
+// Relative editorial priority: impact 35%, exposure 25%, urgency 25%, cross-sector impact 15%.
+// These are scenario-based provisional values, not measured exploit probabilities.
+const threatAxes=[[5,5,5,4],[4,4,4,4],[5,4,5,4],[5,4,4,4],[3,3,3,3],[4,4,4,4],[4,4,5,4],[4,4,4,4],[4,4,5,4],[4,4,4,3]];
+export const threatWatchArticles=rawThreatWatchArticles.map((a,i)=>({...a,score:[97,80,92,87,60,80,85,80,85,77][i],scoreAxes:threatAxes[i],scoreConfidence:'暫定'}));
