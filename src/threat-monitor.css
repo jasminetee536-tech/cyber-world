@@ -85,3 +85,34 @@
 @media(max-width:600px){.tm-kpis .tm-period-kpi{padding:10px 7px}.tm-period-kpi small{font-size:10px}.tm-period-kpi .tm-period-number{font-size:26px}.tm-period-kpi .tm-period-number em{font-size:10px}.tm-period-kpi .tm-open-detail{font-size:9px}.tm-method-lead>strong{font-size:45px}}
 
 .tm-period-summary{width:100%;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px solid #2d7990;border-radius:12px;background:radial-gradient(circle at center,#10415a,#082539 75%);color:#9ec8d9;cursor:pointer;box-shadow:inset 0 0 30px #00cfff0c}.tm-period-summary strong{font-size:53px;line-height:1.1;color:#62ebff;text-shadow:0 0 25px #00d9ff70}.tm-period-summary strong small{font-size:17px;color:#9fc4d2}.tm-period-summary>span:last-child{font-size:12px;color:#6ed7e7}.tm-period-summary:hover{border-color:#68e9f8;box-shadow:0 0 25px #00d9ff35}
+
+/* Five-level calibrated threat severity, consistent across all surfaces */
+.tm-page{--tm-critical:#ff5967;--tm-high:#ff9654;--tm-medium:#f4cc58;--tm-low:#4edba1;--tm-minimal:#54b9f5}
+.tm-severity-critical,.tm-method-critical,.tm-guide-critical{--severity:var(--tm-critical);--severity-glow:#ff596750}
+.tm-severity-high,.tm-method-high,.tm-guide-high{--severity:var(--tm-high);--severity-glow:#ff96544b}
+.tm-severity-medium,.tm-method-medium,.tm-guide-medium{--severity:var(--tm-medium);--severity-glow:#f4cc5848}
+.tm-severity-low,.tm-method-low,.tm-guide-low{--severity:var(--tm-low);--severity-glow:#4edba13b}
+.tm-severity-minimal,.tm-method-minimal,.tm-guide-minimal{--severity:var(--tm-minimal);--severity-glow:#54b9f53b}
+.tm-score-ring.critical{--ring-color:var(--tm-critical);--ring-glow:#ff596766}
+.tm-score-ring.high{--ring-color:var(--tm-high);--ring-glow:#ff965466}
+.tm-score-ring.medium{--ring-color:var(--tm-medium);--ring-glow:#f4cc5866}
+.tm-score-ring.low{--ring-color:var(--tm-low);--ring-glow:#4edba166}
+.tm-score-ring.minimal{--ring-color:var(--tm-minimal);--ring-glow:#54b9f566}
+.tm-event.tm-severity-critical,.tm-event.tm-severity-high,.tm-event.tm-severity-medium,.tm-event.tm-severity-low,.tm-event.tm-severity-minimal{border:1px solid var(--severity);border-left:5px solid var(--severity);box-shadow:0 0 15px var(--severity-glow),inset 0 1px 0 #ffffff14}
+.tm-event.tm-severity-critical:hover,.tm-event.tm-severity-high:hover,.tm-event.tm-severity-medium:hover,.tm-event.tm-severity-low:hover,.tm-event.tm-severity-minimal:hover{border-color:var(--severity);box-shadow:0 0 24px var(--severity-glow)}
+.tm-article.tm-severity-critical,.tm-article.tm-severity-high,.tm-article.tm-severity-medium,.tm-article.tm-severity-low,.tm-article.tm-severity-minimal{border-color:var(--severity);box-shadow:0 0 24px var(--severity-glow)}
+.tm-score-panel.tm-method-critical,.tm-score-panel.tm-method-high,.tm-score-panel.tm-method-medium,.tm-score-panel.tm-method-low,.tm-score-panel.tm-method-minimal{border-color:var(--severity)}
+.tm-period-kpi .tm-text-critical{color:var(--tm-critical)}
+.tm-period-kpi .tm-text-high{color:var(--tm-high)}
+.tm-period-kpi .tm-text-medium{color:var(--tm-medium)}
+.tm-period-kpi .tm-text-low{color:var(--tm-low)}
+.tm-period-kpi .tm-text-minimal{color:var(--tm-minimal)}
+.tm-period-level{font-size:10px;display:block;font-weight:700;letter-spacing:.1em}
+.tm-method-lead.tm-method-critical,.tm-method-lead.tm-method-high,.tm-method-lead.tm-method-medium,.tm-method-lead.tm-method-low,.tm-method-lead.tm-method-minimal{border-color:var(--severity);box-shadow:0 0 15px var(--severity-glow)}
+.tm-method-lead[class*="tm-method-"]>strong,.tm-method-lead[class*="tm-method-"]>b{color:var(--severity);text-shadow:0 0 18px var(--severity-glow)}
+.tm-method-lead>b{font-size:12px;letter-spacing:.12em}
+.tm-level-guide{display:grid;gap:9px}
+.tm-level-guide>div{display:grid;grid-template-columns:95px 65px 1fr;align-items:start;gap:9px;border-left:3px solid var(--severity);padding:9px 8px;background:#0a293b;border-radius:4px;font-size:12px}
+.tm-level-guide b,.tm-level-guide strong{color:var(--severity)}
+.tm-level-guide span{color:#bdd4df;line-height:1.5}
+@media(max-width:600px){.tm-level-guide>div{grid-template-columns:75px 50px 1fr;gap:6px;font-size:10px}.tm-kpis .tm-period-kpi{padding:9px 6px}.tm-period-kpi .tm-open-detail{font-size:8px}}
