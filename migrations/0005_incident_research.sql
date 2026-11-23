@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS incident_research_candidates (incident_id TEXT NOT NULL,evidence_key TEXT NOT NULL,evidence_json TEXT NOT NULL CHECK(json_valid(evidence_json)),observed_at TEXT NOT NULL,PRIMARY KEY (incident_id,evidence_key));
