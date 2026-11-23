@@ -634,6 +634,18 @@ const axisRationale=[
 ["メール保護・配信障害は複数顧客に影響し得る。","共有サービス利用者に影響が集中する。","復旧と滞留メールの確認が必要。","複数顧客への横断的影響がある。"],
 ["ウェブ基盤の重要性は高いが悪用や被害は未確認。","対象系列・設定・公開条件に依存する。","正式な修正情報の確認が必要。","複数アプリへの波及は構成次第。"]
 ];
+const japanPerspectives=[
+'国内でvCenter Serverを運用する組織は、対象バージョンと管理ネットワークの到達性を確認。国内被害はこの記事からは確認できません。',
+'日本の行政機関・企業も、AIツール利用時のアクセス権と監査記録を点検する参考事例です。国内への直接波及は未確認です。',
+'国内でBIG-IPを利用する組織は、対象機能と修正情報を照合する必要があります。国内での悪用はこの記事からは確認できません。',
+'国内で該当する実行環境を使用する場合、対象バージョンと修正状況を確認することが重要です。国内被害は未確認です。',
+'日本への直接的な影響は確認できません。行政機関の復旧・広報体制を考える参考事例です。',
+'国内の通信事業者や委託先は、顧客データの管理・通知体制を点検する参考になります。日本への直接被害は未確認です。',
+'国内で共通のID基盤を利用する組織は、対象機能とアクセス権の確認が論点です。国内への波及は未確認です。',
+'国内の公開サーバー運用でも、脆弱性の把握と修正速度が重要です。日本での同様の被害を示すものではありません。',
+'国内組織が同種のメール基盤に依存する場合、代替連絡手段と滞留メールの確認が論点です。国内影響は未確認です。',
+'国内で該当するウェブ基盤を運用する場合、影響バージョンと設定を確認する必要があります。国内被害は未確認です。'
+];
 const scoreLevel=score=>score>=85?'CRITICAL':score>=70?'HIGH':score>=50?'MEDIUM':score>=30?'LOW':'MINIMAL';
 export const threatWatchArticles=rawThreatWatchArticles.map((a,i)=>{
  const scoreAxes=threatAxes[i];
@@ -644,5 +656,5 @@ export const threatWatchArticles=rawThreatWatchArticles.map((a,i)=>{
  ...scoreAxes.map((v,j)=>({heading:`評価根拠：${axisNames[j]}（${v}/5、${v*axisWeights[j]/5}点）`,text:`【評価軸の定義】${axisDescriptions[j]} 【この事件の加点理由と減点理由】${axisRationale[i][j]} 【判定】5は広範かつ重大な影響の十分な根拠がある場合に限定する。4は高い影響が見込まれるが一部留保あり、3は重要性があるが範囲や成立条件が限定的、2は局所的または根拠が限定的、1は小規模、0は現時点で確認できる影響がない状態を表す。新しい一次情報で変更される暫定評価である。`}))
  ];
  // Drop superseded scoring passages; keep the remaining case analysis and source link.
- return {...a,score,scoreAxes,scoreLevel:scoreLevel(score),scoreConfidence:'暫定',sections:[...scoreSections,...a.sections]};
+ return {...a,score,scoreAxes,scoreLevel:scoreLevel(score),scoreConfidence:'暫定',japanPerspective:japanPerspectives[i],sections:[...scoreSections,...a.sections]};
 });
