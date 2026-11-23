@@ -162,3 +162,16 @@ body{background:#041323}
 .cw-shadow-report p{margin:12px 0;white-space:pre-wrap}
 .cw-shadow-report a{color:#55dcf2}
 @media(max-width:600px){.cw-shadow-panel{margin:16px 0 28px}.cw-shadow-top{gap:10px}.cw-shadow-axis{font-size:11px}.cw-shadow-chart{height:150px}}
+
+/* Retrospective intelligence accountability */
+.cw-shadow-reviews{margin:28px 0;padding-top:12px;border-top:1px solid #2c5369}
+.cw-shadow-review{padding:17px 18px;margin:12px 0;border:1px solid #28566c;background:#0b293b;border-radius:12px;color:#d0e8f1}
+.cw-shadow-review-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cw-shadow-review-head strong{color:#f1fbff}
+.cw-shadow-review-head span{color:#70d9ed;font-size:12px}
+.cw-shadow-review p{line-height:1.7;font-size:13px;color:#b8d2df}
+.cw-shadow-review small{color:#93baca}
+.cw-shadow-review a{display:block;margin:8px 0;color:#62d8ed;overflow-wrap:anywhere}
+.cw-shadow-review-numbers{display:flex;gap:14px;align-items:center}
+.cw-shadow-review-numbers b{font-size:26px;color:#f3fcff}
+.cw-shadow-review-numbers span{color:#74a9bf}
