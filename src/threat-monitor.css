@@ -126,3 +126,11 @@
 .tm-scenario-guide span{font-size:12px;line-height:1.75;color:#aac8d7}
 .tm-scenario-guide>p{font-size:12px;line-height:1.8}
 @media(max-width:480px){.tm-scenario-guide>div{grid-template-columns:60px minmax(0,1fr);gap:9px;padding:10px}.tm-scenario-guide>div>strong{font-size:12px}}
+
+.tm-mission{margin:12px 0 20px;padding:15px 18px;border-left:3px solid #39bfd7;background:linear-gradient(100deg,rgba(13,63,85,.5),rgba(5,22,37,.1));border-radius:0 8px 8px 0}
+.tm-mission strong{display:block;color:#e9faff;font-size:15px;letter-spacing:.02em}.tm-mission p{color:#a9c9d8;font-size:12px;line-height:1.8;margin:6px 0 0}
+.tm-japan-note{display:flex;align-items:flex-start;gap:8px;margin:8px 0!important;padding:10px 12px;background:rgba(28,103,126,.13);border-left:2px solid #46c5dd;border-radius:3px;color:#b9d9e5!important;font-size:12px!important;line-height:1.7!important}
+.tm-japan-note b{color:#6ee0ed;white-space:nowrap;font-size:11px}
+.tm-japan-detail{padding:14px;margin:15px 0;border-left:3px solid #46c5dd;background:rgba(28,103,126,.15)}
+.tm-japan-detail strong{color:#79e4ef}.tm-japan-detail p{font-size:13px;line-height:1.8;margin:6px 0 0}
+@media(max-width:520px){.tm-mission{padding:12px}.tm-mission strong{font-size:14px}.tm-japan-note{display:block}.tm-japan-note b{display:block;margin-bottom:4px}}
