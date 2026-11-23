@@ -83,3 +83,5 @@
 .tm-method-events b{color:#63e4f4;white-space:nowrap;font-size:13px}
 .tm-method-close{border:1px solid #47cfe2;background:#0b4b5d;color:#e9faff;border-radius:9px;padding:12px 18px;margin-top:16px;cursor:pointer}
 @media(max-width:600px){.tm-kpis .tm-period-kpi{padding:10px 7px}.tm-period-kpi small{font-size:10px}.tm-period-kpi .tm-period-number{font-size:26px}.tm-period-kpi .tm-period-number em{font-size:10px}.tm-period-kpi .tm-open-detail{font-size:9px}.tm-method-lead>strong{font-size:45px}}
+
+.tm-period-summary{width:100%;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px solid #2d7990;border-radius:12px;background:radial-gradient(circle at center,#10415a,#082539 75%);color:#9ec8d9;cursor:pointer;box-shadow:inset 0 0 30px #00cfff0c}.tm-period-summary strong{font-size:53px;line-height:1.1;color:#62ebff;text-shadow:0 0 25px #00d9ff70}.tm-period-summary strong small{font-size:17px;color:#9fc4d2}.tm-period-summary>span:last-child{font-size:12px;color:#6ed7e7}.tm-period-summary:hover{border-color:#68e9f8;box-shadow:0 0 25px #00d9ff35}
