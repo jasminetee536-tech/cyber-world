@@ -9,7 +9,7 @@ export async function proposeIncidentAssessments(env,{limit=5}={}){
  if(!env?.AI)return {status:'ai_not_configured',proposed:0,note:'Cloudflare Workers AI binding AI is required'};
  const rows=await env.CWRI_DB.prepare('SELECT incident_id FROM incident_assessment_proposals').all();
  const done=new Set((rows.results||[]).map(x=>x.incident_id));
- const pending=incidents.filter(x=>x.score==null&&!done.has(x.id));
+ const pending=incidents.filter(x=>x.score==null&&!done.has(x.id)&&(x.sourceUrls||[]).some(isOfficial));
  let proposed=0,skipped=0,errors=[];
  for(const e of pending.slice(0,Math.min(10,Math.max(1,limit)))){
   const urls=(e.sourceUrls||[]).filter(isOfficial).slice(0,3);
