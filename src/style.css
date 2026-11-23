@@ -226,3 +226,35 @@ body{background:#041323}
 .cw-archive-year{border:1px solid #27536b;border-radius:12px;padding:18px;margin:22px 0;background:#0b2637;color:#c5dce8}
 .cw-archive-year summary{cursor:pointer;color:#69dced;font-weight:700}
 @media(max-width:700px){.cw-case-card{grid-template-columns:95px minmax(0,1fr);gap:12px;padding:12px}.cw-case-art{min-height:118px;align-self:stretch}.cw-case-art>span{font-size:55px}.cw-case-art small{font-size:6px;letter-spacing:1px}.cw-case-score{grid-column:1;grid-row:2;width:74px;height:74px;justify-self:center}.cw-case-score>div{width:62px;height:62px}.cw-case-score b{font-size:23px}.cw-case-score small{font-size:8px}.cw-case-body{grid-column:2;grid-row:1 / span 2}.cw-case-body h3{font-size:17px}.cw-case-summary{font-size:12px}.cw-archive-filters select{flex:1 1 42%;min-width:0;font-size:13px}.cw-archive-toolbar select{font-size:12px}.cw-archive-stats{gap:10px 16px}.cw-archive-stats b{font-size:16px}.cw-archive-hero{padding:23px 17px}}
+
+
+/* Two incident cards per row, including compact mobile screens */
+.cw-case-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.cw-case-card{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr auto;gap:10px;align-items:start;padding:14px}
+.cw-case-art{grid-column:1/-1;grid-row:1;min-height:150px}
+.cw-case-body{grid-column:1;grid-row:2 / span 2;min-width:0}
+.cw-case-score{grid-column:2;grid-row:2;width:78px;height:78px}
+.cw-case-score>div{width:65px;height:65px}
+.cw-case-score b{font-size:23px}
+.cw-case-body h3{font-size:clamp(15px,1.8vw,21px)}
+.cw-case-summary{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cw-case-expanded{grid-column:1/-1;grid-row:4}
+@media(max-width:700px){
+ .cw-case-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .cw-case-card{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto auto;gap:8px;padding:9px;border-radius:11px}
+ .cw-case-art{grid-column:1;grid-row:1;min-height:94px}
+ .cw-case-art>span{font-size:45px}
+ .cw-case-art small{font-size:6px}
+ .cw-case-body{grid-column:1;grid-row:3}
+ .cw-case-score{grid-column:1;grid-row:2;justify-self:start;width:65px;height:65px}
+ .cw-case-score>div{width:54px;height:54px}
+ .cw-case-score b{font-size:19px}
+ .cw-case-score small{font-size:7px}
+ .cw-case-body h3{font-size:14px;line-height:1.45;overflow-wrap:anywhere}
+ .cw-case-summary{font-size:11px;line-height:1.55;-webkit-line-clamp:3}
+ .cw-case-meta{font-size:10px}
+ .cw-case-meta span+span{padding:2px 6px}
+ .cw-case-tags{font-size:9px}
+ .cw-case-read{font-size:11px}
+ .cw-case-expanded{grid-column:1;grid-row:4;font-size:12px}
+}
