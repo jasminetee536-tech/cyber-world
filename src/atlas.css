@@ -168,3 +168,20 @@
 .atlas-profile-sources a{display:block;color:#6bdbed;font-size:12px;margin:9px 0}
 @media(max-width:760px){.atlas-directory-hero{display:block;padding-top:8px}.atlas-directory-hero h2{font-size:25px}.atlas-directory-stats{gap:20px;margin-top:14px}.atlas-directory-stats b{font-size:20px}.atlas-directory-grid{grid-template-columns:minmax(0,1fr)}.atlas-directory-card{grid-template-columns:36% minmax(0,1fr)}.atlas-directory-photo{min-height:140px}.atlas-directory-info{padding:11px}.atlas-directory-info h3{font-size:15px}.atlas-directory-info p{font-size:11px}.atlas-directory-bottom strong{font-size:21px}.atlas-profile-content{padding:16px}.atlas-profile-score{grid-template-columns:1fr;gap:8px}.atlas-profile-image{height:150px}}
 @media(max-width:380px){.atlas-directory-photo{min-height:130px}.atlas-directory-info h3{font-size:14px}.atlas-directory-info{gap:5px}.atlas-directory-bottom span{font-size:9px}}
+
+/* Mobile-first category matrix and stable image/modal layout */
+.atlas-directory-domains{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;overflow:visible;padding:0;margin:15px 0 22px}
+.atlas-directory-domains button{min-width:0;min-height:74px;white-space:normal;flex-direction:column;justify-content:center;gap:4px;padding:9px 3px;text-align:center;line-height:1.3;overflow-wrap:anywhere}
+.atlas-directory-domains button span{font-size:20px;line-height:1.1}
+.atlas-directory-domains button small{font-size:10px}
+.atlas-profile{display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;max-height:calc(100dvh - 32px);scrollbar-gutter:stable}
+.atlas-profile-close{position:sticky;top:12px;align-self:flex-end;float:none;flex:none;margin:12px 12px -48px 0;z-index:10}
+.atlas-profile-image{flex:0 0 auto;height:220px;min-height:0;overflow:hidden;margin:0}
+.atlas-profile-image img{display:block;width:100%;height:100%;object-fit:cover}
+.atlas-profile-content{position:relative;z-index:1;flex:0 0 auto;min-width:0;overflow-wrap:anywhere;background:#071c2b}
+.atlas-profile-content h2{position:static;line-height:1.4;overflow-wrap:anywhere}
+.atlas-profile-score{min-width:0}
+.atlas-axis{min-width:0}
+.atlas-axis meter{min-width:0}
+@media(max-width:760px){.atlas-modal-backdrop{padding:10px;align-items:center}.atlas-profile{max-height:calc(100dvh - 20px)}.atlas-profile-image{height:165px}.atlas-profile-content{padding:18px}.atlas-directory-domains{gap:6px}.atlas-directory-domains button{font-size:11px;min-height:76px;padding:8px 2px}.atlas-directory-domains button span{font-size:19px}}
+@media(max-width:390px){.atlas-directory-domains button{font-size:10px}.atlas-directory-domains button small{font-size:9px}}
