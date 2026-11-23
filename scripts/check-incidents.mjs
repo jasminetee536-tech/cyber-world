@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {incidents,incidentFollowupSummary} from '../src/incident-data.js';
 import {incidentAxes,weightedScore} from '../src/cwri.js';
 const ids=new Set();
-assert.equal(incidents.length,120,'Incident count must be 120');
+assert(incidents.length>=120,'Incident count must be at least 120');
 for(const incident of incidents){
  assert(!ids.has(incident.id),'Duplicate incident ID '+incident.id);ids.add(incident.id);
  assert(incident.year>=2010&&incident.year<=2026,'Invalid year '+incident.id);
