@@ -6,9 +6,11 @@ const tokyoDate=(date=new Date())=>new Intl.DateTimeFormat('en-CA',{timeZone:'As
 const dateIsValid=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'');
 export async function buildDaily(env,date=tokyoDate()){
  const response=await feedGet();const feed=await response.json();
- const scored=scoreEvents(feed.items||[]);
+ const cutoff=Date.parse(date+'T00:00:00+09:00')-7*86400000;
+ const recent=(feed.items||[]).filter(x=>x.date&&Number.isFinite(Date.parse(x.date))&&Date.parse(x.date)>=cutoff&&Date.parse(x.date)<=Date.now()+86400000);
+ const scored=scoreEvents(recent);
  const report=makeBrief(scored,date);
- const data={date,generatedAt:new Date().toISOString(),...scored,report,sourceErrors:feed.errors||[],editorialStatus:'automated_provisional'};
+ const data={date,generatedAt:new Date().toISOString(),...scored,report,sourceErrors:feed.errors||[],sourceWindow:'直近7日間の公開情報（取得可能なRSSのみ）',editorialStatus:'automated_provisional'};
  if(env?.SHADOW_DB){
   await env.SHADOW_DB.prepare('INSERT INTO shadow_daily (day, payload, created_at) VALUES (?1,?2,?3) ON CONFLICT(day) DO UPDATE SET payload=excluded.payload, created_at=excluded.created_at').bind(date,JSON.stringify(data),data.generatedAt).run();
  }
