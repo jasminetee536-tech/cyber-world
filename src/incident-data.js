@@ -1,5 +1,6 @@
 import {incidentAxes,annualAxes,weightedScore} from './cwri.js';
 import {expandedIncidents} from './incident-expansion.js';
+import {weeklyIncidents} from './incident-weekly.js';
 import {followupAssessments} from './incident-followups.js';
 // Curated, preliminary editorial assessments. They are NOT official scores.
 // Scores are withheld for records without independently verified evidence.
@@ -32,7 +33,7 @@ const editorialSections=[
 ];
 const initialWithDetails=initialIncidents.map(e=>({...e,detail:'【事件の概要】'+e.summary+'\\n\\n【教訓】'+e.lesson+'\\n\\n'+editorialSections.join('\\n\\n')+'\\n\\n【CYBER WORLDの分析】'+e.title+'を単独の技術的問題ではなく、認証・運用・復旧・社会機能のつながりから検討します。個別事実の追加確認と出典照合が必要な編集草稿です。'}));
 const followupIndex=new Map(followupAssessments.map(x=>[x.year+'|'+x.title,x]));
-export const incidents=[...initialWithDetails,...expandedIncidents].map(e=>{
+export const incidents=[...initialWithDetails,...expandedIncidents,...weeklyIncidents].map(e=>{
  const followup=followupIndex.get(e.year+'|'+e.title);
  if(!followup)return {...e,followupStatus:e.score==null?'要一次資料照合':'暫定採点済み・追加照合待ち'};
  const score=weightedScore(incidentAxes,followup.ratings);
