@@ -1,0 +1,34 @@
+name: Publish five weekly incident reports
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+      timezone: 'Asia/Tokyo'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: weekly-incident-publishing
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Gather incident news and verify five unique candidates
+        run: node scripts/publish-weekly-incidents.mjs
+      - name: Validate incident dataset
+        run: node scripts/check-incidents.mjs
+      - name: Commit new articles
+        run: |
+          git config user.name "cyber-world-bot"
+          git config user.email "cyber-world-bot@users.noreply.github.com"
+          git add src/incident-weekly.js
+          git diff --cached --quiet && exit 0
+          git commit -m "content: publish five weekly cyber incident reports"
+          git push
