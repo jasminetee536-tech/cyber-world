@@ -6,9 +6,9 @@ import {encyclopedia} from './encyclopedia.js';
 import {infrastructure} from './infrastructure.js';
 import {featuredEncyclopedia,editorialForecasts} from './editorial.js';
 import {domainOriginalArticles} from './domain-originals.js';
-const libraryDomains=[featuredEncyclopedia,...encyclopedia,...infrastructure].map(group=>({...group,articles:[...domainOriginalArticles.filter(a=>a.category===group.name),...group.articles]}));
 import InfrastructureAtlas from './InfrastructureAtlas.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
+const libraryDomains=[featuredEncyclopedia,...encyclopedia,...infrastructure].map(group=>({...group,articles:[...domainOriginalArticles.filter(a=>a.category===group.name),...group.articles]}));
 const terms=[
 {name:'ランサムウェア',category:'マルウェア',icon:'▣',description:'ファイルを暗号化するなどして利用を妨げ、金銭を要求する不正プログラム。',action:'重要なデータのバックアップと更新を継続する。'},
 {name:'フィッシング',category:'詐欺',icon:'⌁',description:'偽のメールやサイトを使い、IDやパスワードなどを盗み取る手口。',action:'リンク先のURLを確認し、公式アプリからアクセスする。'},
