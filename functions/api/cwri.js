@@ -37,7 +37,7 @@ export async function cwriGet(){try{const d=await collectCWRI();return json(d,d.
 export async function persistCWRI(env){
  const snapshot=await collectCWRI();
  if(!env.CWRI_DB)return {status:'not_configured',reason:'CWRI_DB D1 binding is required for persistent review history'};
- await env.CWRI_DB.prepare('INSERT OR IGNORE INTO cwri_snapshots (day, payload, recorded_at) VALUES (?, ?, ?)').bind(snapshot.updatedAt.slice(0,10),JSON.stringify(snapshot),snapshot.updatedAt).run();
+ await env.CWRI_DB.prepare('INSERT OR REPLACE INTO cwri_snapshots (day, payload, recorded_at) VALUES (?, ?, ?)').bind(snapshot.updatedAt.slice(0,10),JSON.stringify(snapshot),snapshot.updatedAt).run();
  return {status:'stored',day:snapshot.updatedAt.slice(0,10)};
 }
 // Review previously observed signals against today's source snapshot.
