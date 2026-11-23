@@ -2,6 +2,8 @@ import {incidentAxes,annualAxes,weightedScore} from './cwri.js';
 import {expandedIncidents} from './incident-expansion.js';
 import {weeklyIncidents} from './incident-weekly.js';
 import {followupAssessments} from './incident-followups.js';
+// Calibrated editorial impact score: reserve 85+ for exceptionally severe cases.
+export const calibrateIncidentScore=score=>score==null?null:Math.round(100*Math.pow(Math.max(0,Math.min(100,score))/100,1.7));
 // Curated, preliminary editorial assessments. They are NOT official scores.
 // Scores are withheld for records without independently verified evidence.
 const raw=[
@@ -38,7 +40,7 @@ export const incidents=[...initialWithDetails,...expandedIncidents,...weeklyInci
  if(!followup)return {...e,followupStatus:e.score==null?'要一次資料照合':'暫定採点済み・追加照合待ち'};
  const score=weightedScore(incidentAxes,followup.ratings);
  return {...e,score,ratings:followup.ratings,confidence:followup.confidence,sourceUrls:followup.evidence.map(x=>x.url),evidence:followup.evidence,assessmentRationale:followup.rationale,assessedAt:'2026-11-23',status:'根拠付き暫定採点・独立査読前',followupStatus:'一次・公的資料による追跡評価済み',reviewHistory:[...(e.reviewHistory||[]),{date:'2026-11-23',score,reason:'公的資料を照合したCWRI暫定再評価。'+followup.rationale}]};
-}).sort((a,b)=>b.year-a.year||a.title.localeCompare(b.title,'ja'));
+}).map(e=>({...e,score:calibrateIncidentScore(e.score),reviewHistory:(e.reviewHistory||[]).map(h=>({...h,score:calibrateIncidentScore(h.score)}))})).sort((a,b)=>b.year-a.year||a.title.localeCompare(b.title,'ja'));
 export const incidentFollowupSummary={total:incidents.length,scored:incidents.filter(x=>x.score!=null).length,pending:incidents.filter(x=>x.score==null).length,reviewed:followupAssessments.length};
 export function annualSummary(year){
  const list=incidents.filter(x=>x.year===Number(year));
