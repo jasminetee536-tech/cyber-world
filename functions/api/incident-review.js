@@ -35,6 +35,22 @@ export async function incidentAssessmentPost(request,env){
   return reply({status:'saved',incidentId:incident.id,score,confidence:data.confidence,reviewedAt:at});
  }catch{return reply({error:'Database migration required or write failed'},503)}
 }
+export async function incidentReviewDueGet(request,env){
+ if(!env?.CWRI_DB)return reply({status:'not_configured',due:[]});
+ try{
+  const latest=await env.CWRI_DB.prepare('SELECT incident_id,score,confidence,reviewed_at FROM incident_assessments').all();
+  const history=await env.CWRI_DB.prepare('SELECT incident_id,reviewed_at FROM incident_assessment_history ORDER BY reviewed_at DESC LIMIT 5000').all();
+  const byId=new Map();
+  for(const r of history.results||[]){if(!byId.has(r.incident_id))byId.set(r.incident_id,[]);byId.get(r.incident_id).push(r.reviewed_at)}
+  const now=Date.now(),day=86400000;
+  const due=(latest.results||[]).flatMap(r=>{
+   const dates=byId.get(r.incident_id)||[r.reviewed_at],first=Math.min(...dates.map(x=>Date.parse(x)).filter(Number.isFinite));
+   if(!Number.isFinite(first))return [];
+   return [7,30].filter(days=>now-first>=days*day&&!dates.some(d=>Date.parse(d)>=first+days*day)).map(days=>({incidentId:r.incident_id,windowDays:days,baselineAt:new Date(first).toISOString(),lastReviewedAt:r.reviewed_at,score:r.score,reason:'指定期間後の新情報・解決状況の再確認が必要。自動的に解決とみなさない。'}));
+  });
+  return reply({status:'ok',due,policy:'レビュー期限の通知。実際の解決確認・再採点は事件別の資料確認と編集承認が必要。'});
+ }catch{return reply({status:'migration_required',due:[]},503)}
+}
 export async function incidentAssessmentsGet(request,env){
  if(!env?.CWRI_DB)return reply({status:'not_configured',assessments:[]});
  try{const r=await env.CWRI_DB.prepare('SELECT incident_id,score,ratings,confidence,source_urls,rationale,reviewed_at FROM incident_assessments').all();return reply({status:'ok',assessments:(r.results||[]).map(x=>({...x,ratings:JSON.parse(x.ratings),evidence:JSON.parse(x.source_urls)}))})}catch{return reply({status:'migration_required',assessments:[]},503)}
