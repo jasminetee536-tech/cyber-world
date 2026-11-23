@@ -35,3 +35,16 @@
 .tm-score-panel>small{color:#83aab9;font-size:10px}
 @media(max-width:600px){.tm-event-heading{gap:5px}.tm-score strong{font-size:23px}.tm-score small{font-size:9px}.tm-score-axes>div{grid-template-columns:110px 1fr 30px;gap:6px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.tm-event,.tm-focus button{transition:none;transform:none!important}}
+
+/* Circular traffic-light severity gauge */
+.tm-score-ring{--ring-color:#f7c64c;--ring-glow:#f7c64c55;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ring-color) calc(var(--score)*1%),#234354 0);box-shadow:0 0 14px var(--ring-glow);filter:none;flex:none}
+.tm-score-ring.critical{--ring-color:#ff6067;--ring-glow:#ff606766}
+.tm-score-ring.elevated{--ring-color:#f7c64c;--ring-glow:#f7c64c55}
+.tm-score-ring.guarded{--ring-color:#40d39b;--ring-glow:#40d39b55}
+.tm-score-inner{width:calc(100% - 9px);height:calc(100% - 9px);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#092334}
+.tm-score-ring .tm-score-inner strong{font-size:23px;line-height:1;color:#f0faff;text-shadow:none}
+.tm-score-ring .tm-score-inner small{font-size:10px;color:#b8d0dc}
+.tm-score-ring-large{width:98px;height:98px}
+.tm-score-ring-large .tm-score-inner strong{font-size:35px}
+.tm-score-panel>div:first-child strong{font-size:inherit}
+@media(max-width:600px){.tm-score-ring{width:53px;height:53px}.tm-score-ring .tm-score-inner strong{font-size:19px}.tm-score-ring-large{width:90px;height:90px}.tm-score-ring-large .tm-score-inner strong{font-size:32px}}
