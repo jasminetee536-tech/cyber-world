@@ -346,3 +346,52 @@ body{background:#041323}
  .cw-case-score>div{width:40px;height:40px}
  .cw-case-score b{font-size:15px}
 }
+
+
+/* Site-wide visual density: 100% browser zoom, approximately 92% design scale */
+.cw-page{font-size:.94rem}
+.cw-page h1{line-height:1.25}
+.cw-page h2{line-height:1.3}
+.cw-page .cw-section{margin-top:22px;margin-bottom:24px}
+.cw-page .cw-kicker{font-size:11px;letter-spacing:1.2px}
+.cw-page .cw-section-head{margin-bottom:14px}
+.cw-page .cw-muted{font-size:12px}
+.cw-library-hero{padding:19px 0 16px!important;margin:0 0 13px!important}
+.cw-library-hero h1{font-size:clamp(25px,3.2vw,39px)!important;margin:8px 0!important}
+.cw-library-hero h1 span{font-size:clamp(11px,1.5vw,15px);letter-spacing:1px}
+.cw-library-hero p{font-size:13px!important;line-height:1.6!important;margin:9px 0!important}
+.cw-library-overview{display:flex!important;gap:10px 24px!important;flex-wrap:wrap!important;margin:13px 0 0!important;padding:0!important}
+.cw-library-overview>span{font-size:22px!important}
+.cw-library-overview small{font-size:11px!important}
+.cw-library-find{display:grid;gap:7px;background:linear-gradient(130deg,#0a293d,#061b2c);border:1px solid #28728d;border-radius:13px;padding:13px 15px;margin:0 0 16px}
+.cw-library-find label{font-size:15px;font-weight:700;color:#e7fbff}
+.cw-library-find input{width:100%;min-width:0;padding:11px 13px;background:#06192b;color:#fff;border:1px solid #386b87;border-radius:9px;font-size:13px}
+.cw-library-find small{color:#9dbecd;font-size:11px}
+.cw-library-categories{gap:11px!important}
+.cw-library-categories .cw-category-card{padding:15px!important;min-height:0!important;display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.cw-library-categories .cw-term-icon{font-size:27px!important;margin:0 0 6px!important}
+.cw-library-categories .cw-category-card small{font-size:10px!important}
+.cw-library-categories .cw-category-card h2{font-size:18px!important;margin:7px 0!important}
+.cw-library-categories .cw-category-card p{font-size:12px!important;line-height:1.55!important;margin:4px 0 10px!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cw-library-categories .cw-category-card>span{margin-top:auto;color:#5ee5f7;font-size:12px}
+@media(max-width:700px){
+ .cw-page{font-size:.91rem}
+ .cw-page .cw-section{margin-top:16px;margin-bottom:19px}
+ .cw-library-hero{padding:10px 0 11px!important}
+ .cw-library-hero h1{font-size:25px!important;margin:6px 0!important}
+ .cw-library-hero h1 span{display:block;font-size:10px!important;margin-top:3px}
+ .cw-library-hero p{font-size:12px!important;line-height:1.55!important}
+ .cw-library-overview{gap:6px 15px!important;margin-top:10px!important}
+ .cw-library-overview>span{font-size:18px!important}
+ .cw-library-overview small{font-size:10px!important}
+ .cw-library-find{padding:11px 12px;margin-bottom:12px}
+ .cw-library-categories{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ .cw-library-categories .cw-category-card{padding:12px!important;border-radius:12px}
+ .cw-library-categories .cw-term-icon{font-size:23px!important}
+ .cw-library-categories .cw-category-card h2{font-size:15px!important}
+ .cw-library-categories .cw-category-card p{font-size:11px!important}
+ .cw-library-categories .cw-category-card small{font-size:9px!important}
+ .cw-library-categories .cw-category-card>span{font-size:10px}
+ .cw-library-collection .cw-library-article{padding:12px}
+ .cw-library-collection .cw-library-article h3{font-size:15px}
+}
