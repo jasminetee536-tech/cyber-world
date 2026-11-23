@@ -639,7 +639,7 @@ export const threatWatchArticles=rawThreatWatchArticles.map((a,i)=>{
  const scoreAxes=threatAxes[i];
  const score=scoreAxes.reduce((sum,v,j)=>sum+v*axisWeights[j]/5,0);
  const scoreSections=[
- {heading:'再評価後のスコアと判定',text:`総合スコアは${score}/100、レベルは${scoreLevel(score)}。この点数は当サイトの相対的な重要度であり、攻撃成功率や実測の被害確率ではない。0〜19 MINIMAL、20〜29 MINIMAL、30〜49 LOW、50〜69 MEDIUM、70〜84 HIGH、85〜100 CRITICALの区分を用いる。満点は極めて例外的な事象に限定する。`},
+ {heading:'再評価後のスコアと判定',text:`総合スコアは${score}/100、レベルは${scoreLevel(score)}。この点数は当サイトの相対的な重要度であり、攻撃成功率や実測の被害確率ではない。0〜29 MINIMAL、30〜49 LOW、50〜69 MEDIUM、70〜84 HIGH、85〜100 CRITICALの区分を用いる。満点は極めて例外的な事象に限定する。`},
  {heading:'評価方法と配点の計算',text:`社会的影響35点、露出・到達可能性25点、対応の緊急性25点、他分野への波及15点。各軸0〜5段階を評価し、獲得点＝配点×評価値÷5とする。今回の計算は${scoreAxes.map((v,j)=>`${axisNames[j]} ${v}/5＝${v*axisWeights[j]/5}点`).join('、')}。合計${score}点。確認された事実と推定は区別し、重大な製品であるというだけで最高点を与えない。`},
  ...scoreAxes.map((v,j)=>({heading:`評価根拠：${axisNames[j]}（${v}/5、${v*axisWeights[j]/5}点）`,text:`【評価軸の定義】${axisDescriptions[j]} 【この事件の加点理由と減点理由】${axisRationale[i][j]} 【判定】5は広範かつ重大な影響の十分な根拠がある場合に限定する。4は高い影響が見込まれるが一部留保あり、3は重要性があるが範囲や成立条件が限定的、2は局所的または根拠が限定的、1は小規模、0は現時点で確認できる影響がない状態を表す。新しい一次情報で変更される暫定評価である。`}))
  ];
