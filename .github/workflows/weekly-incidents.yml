@@ -1,8 +1,7 @@
-name: Publish five weekly incident reports
+name: Manual fallback for weekly incident reports
+# Automatic weekly publishing is handled by a ChatGPT scheduled task.
+# Keep this workflow as a manual fallback only to prevent duplicate publication.
 on:
-  schedule:
-    - cron: '0 8 * * 1'
-      timezone: 'Asia/Tokyo'
   workflow_dispatch:
 permissions:
   contents: write
