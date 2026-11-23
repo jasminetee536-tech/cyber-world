@@ -2,7 +2,7 @@ import { onRequestGet } from './functions/api/feed.js';
 import { onRequestGet as futureGet } from './functions/api/future.js';
 import {shadowGet,buildDaily} from './functions/api/shadow.js';
 import {cwriGet,historyGet,persistCWRI,reviewCWRI,reviewsGet} from './functions/api/cwri.js';
-import {incidentQueueGet,incidentAssessmentPost,incidentAssessmentsGet} from './functions/api/incident-review.js';
+import {incidentQueueGet,incidentAssessmentPost,incidentAssessmentsGet,incidentReviewDueGet} from './functions/api/incident-review.js';
 import {refreshIncidentResearch,incidentResearchGet} from './functions/api/incident-research.js';
 
 export default {
@@ -13,6 +13,7 @@ export default {
       return onRequestGet();
     }
     if (url.pathname === '/api/future' && request.method === 'GET') return futureGet();
+    if (url.pathname === '/api/incidents/reviews/due' && request.method === 'GET') return incidentReviewDueGet(request,env);
     if (url.pathname === '/api/incidents/research' && request.method === 'GET') return incidentResearchGet(request,env);
     if (url.pathname === '/api/incidents/queue' && request.method === 'GET') return incidentQueueGet(request,env);
     if (url.pathname === '/api/incidents/assessments' && request.method === 'GET') return incidentAssessmentsGet(request,env);
