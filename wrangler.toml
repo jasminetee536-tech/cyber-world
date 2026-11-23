@@ -5,3 +5,10 @@ compatibility_date = "2026-11-01"
 [assets]
 directory = "./dist"
 binding = "ASSETS"
+
+# 00:00 UTC = 09:00 Japan Standard Time
+[triggers]
+crons = ["0 0 * * *"]
+
+# After creating a D1 database, add [[d1_databases]] with binding = "SHADOW_DB".
+# Apply migrations/0001_shadow_daily.sql before enabling persistent snapshots.
