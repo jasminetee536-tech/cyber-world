@@ -1,0 +1,19 @@
+import React,{useMemo,useState} from 'react';
+import {threatWatchArticles} from './threat-watch-articles.js';
+import './threat-monitor.css';
+const filters=['すべて','国家・APT','ランサムウェア','重要インフラ','脆弱性','AI・サイバー','情報漏えい','サプライチェーン'];
+export default function ThreatMonitor({shadow,shadowError}){
+ const [filter,setFilter]=useState('すべて'),[opened,setOpened]=useState(null);
+ const articles=useMemo(()=>threatWatchArticles.filter(a=>filter==='すべて'||a.category===filter),[filter]);
+ const count=threatWatchArticles.length;
+ const high=threatWatchArticles.filter(a=>a.priority==='HIGH').length;
+ return <main className="tm-page">
+  <header className="tm-heading"><div><small>GLOBAL CYBER THREAT INTELLIGENCE</small><h1>脅威モニター</h1></div><span className="tm-status">2026.11.23 / WEEKLY WATCH</span></header>
+  <div className="tm-kpis"><div><small>監視中の事象</small><strong>{count}</strong></div><div><small>高優先度</small><strong className="tm-alert">{high}</strong></div><div><small>対象期間</small><strong className="tm-date">7日間</strong></div></div>
+  <section className="tm-trend"><div className="tm-section-title"><h2>脅威動向</h2><span>SHADOW INDEX</span></div>{shadow?.history?.length>1?<div className="tm-trend-chart"><svg viewBox="0 0 600 150" preserveAspectRatio="none" aria-label="脅威指数の推移"><defs><linearGradient id="tmFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#32ddeb" stopOpacity=".4"/><stop offset="100%" stopColor="#32ddeb" stopOpacity="0"/></linearGradient></defs>{[25,50,75,100].map(n=><line key={n} x1="0" x2="600" y1={150-n*1.35} y2={150-n*1.35} stroke="#254c61" strokeDasharray="3 6"/>)}<polygon points={['0,150',...shadow.history.map((p,i)=>`${i*600/Math.max(1,shadow.history.length-1)},${150-(p.score||0)*1.35}`),'600,150'].join(' ')} fill="url(#tmFill)"/><polyline points={shadow.history.map((p,i)=>`${i*600/Math.max(1,shadow.history.length-1)},${150-(p.score||0)*1.35}`).join(' ')} fill="none" stroke="#46e6f0" strokeWidth="3"/></svg></div>:<p className="tm-no-data">推移データの蓄積後に表示します。</p>}</section>
+  <div className="tm-filters">{filters.map(f=><button key={f} className={filter===f?'active':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
+  <section className="tm-events"><div className="tm-section-title"><h2>最新の脅威情報</h2><span>{articles.length}件</span></div>{articles.length?articles.map(a=><article className="tm-event" key={a.id}><img src={a.image} alt="" loading="lazy"/><div className="tm-event-body"><div className="tm-meta"><b className={a.priority==='HIGH'?'high':'medium'}>{a.priority}</b><span>{a.date}</span></div><h3>{a.title}</h3><p>{a.summary}</p><button onClick={()=>setOpened(a)}>分析記事を読む <span>›</span></button></div></article>):<p className="tm-no-data">この期間に該当する記事はありません。</p>}</section>
+  <section className="tm-focus"><h2>注目分野</h2><div><button onClick={()=>setFilter('重要インフラ')}><img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=700&q=80" alt=""/><strong>⚡ エネルギー</strong><span>重要インフラの脅威動向</span></button><button onClick={()=>setFilter('情報漏えい')}><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=700&q=80" alt=""/><strong>◉ 通信</strong><span>通信・情報基盤のリスク</span></button></div></section>
+  {opened&&<div className="tm-overlay" onClick={()=>setOpened(null)}><article className="tm-article" onClick={e=>e.stopPropagation()}><button className="tm-close" onClick={()=>setOpened(null)} aria-label="閉じる">×</button><img className="tm-hero" src={opened.image} alt=""/><div className="tm-article-content"><small>{opened.date} / {opened.category}</small><h2>{opened.title}</h2><p className="tm-lead">{opened.summary}</p>{opened.sections.map((section,i)=><section key={i}><h3>{String(i+1).padStart(2,'0')} / {section.heading}</h3><p>{section.text}</p></section>)}<a href={opened.url} target="_blank" rel="noopener noreferrer">情報源を確認 ↗</a></div></article></div>}
+ </main>
+}
