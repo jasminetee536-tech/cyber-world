@@ -1,6 +1,4 @@
-import React,{useEffect,useRef,useState} from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import React,{useState} from 'react';
 import './atlas.css';
 
 const domains=[
@@ -36,28 +34,79 @@ const sites=[
 ['logistics','東京港・湾岸物流エリア','東京都',35.62,139.79,'首都圏の海上貨物と倉庫・陸送をつなぐ物流地域。','倉庫管理・配送計画システムの停止。','配送遅延と小売・製造業への波及。'],
 ['government','霞が関行政地区','東京都',35.67,139.75,'中央行政機関が集まる行政機能の中心地区。','行政サービス停止、情報漏えい、サプライチェーン侵害。','行政手続きや機関間の情報連携への影響。']
 ].map((s,i)=>({id:i,domain:s[0],name:s[1],region:s[2],lat:s[3],lng:s[4],importance:s[5],risk:s[6],impact:s[7]}));
-function JapanMap({items,selected,onSelect}){
- const node=useRef(null),map=useRef(null),layer=useRef(null);
- const [tileError,setTileError]=useState(false);
- useEffect(()=>{if(!node.current||map.current)return;const m=L.map(node.current,{zoomControl:false,scrollWheelZoom:false,attributionControl:true,minZoom:4,maxZoom:12}).setView([37.5,137.3],5);const tiles=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:18,className:'atlas-dark-tiles'});tiles.on('tileerror',()=>setTileError(true));tiles.on('tileload',()=>setTileError(false));tiles.addTo(m);L.control.zoom({position:'bottomright'}).addTo(m);map.current=m;layer.current=L.layerGroup().addTo(m);setTimeout(()=>m.invalidateSize(),150);return()=>{m.remove();map.current=null}},[]);
- useEffect(()=>{if(!map.current||!layer.current)return;layer.current.clearLayers();items.forEach(s=>{const active=selected?.id===s.id;L.circleMarker([s.lat,s.lng],{radius:active?11:7,color:active?'#ffd68d':'#8cf7ff',weight:active?3:2,fillColor:active?'#ffb84b':'#00d9ff',fillOpacity:1,className:active?'atlas-marker-active':'atlas-marker'}).addTo(layer.current).bindTooltip(s.name).on('click',()=>onSelect(s))})},[items,selected,onSelect]);
- useEffect(()=>{if(selected&&map.current)map.current.flyTo([selected.lat,selected.lng],Math.max(map.current.getZoom(),7),{duration:.65})},[selected?.id]);
- return <div className="atlas-map-shell"><div ref={node} className="atlas-map" aria-label="日本の重要インフラ地図"/><div className="atlas-map-vignette" aria-hidden="true"/>{tileError&&<div className="atlas-map-error" role="status">地図画像を読み込めません。右側の拠点一覧から詳細情報を確認できます。</div>}<div className="atlas-map-crosshair" aria-hidden="true">＋</div><div className="atlas-map-hud" aria-hidden="true"><span className="atlas-live-dot"/> JAPAN / GEO INTELLIGENCE <b>35°N · 139°E</b></div><div className="atlas-map-corner" aria-hidden="true">◢ CYBER WORLD / ATLAS</div></div>;
+
+const additionalSites=[
+['airport','中部国際空港','愛知県','中部圏の国際航空輸送と製造業の貨物ネットワークを支える拠点。','航空物流や予約・運航支援のデジタルサービス停止。','輸出入の遅延と周辺交通への影響。'],
+['airport','新千歳空港','北海道','北海道の航空旅客・貨物の主要玄関口。','運航情報・旅客案内・航空関連サービスの停止。','北海道内外の移動と観光・物流への波及。'],
+['airport','福岡空港','福岡県','九州の広域航空交通を担う主要空港。','空港業務・旅客情報の可用性低下。','国内外の移動や地域経済への影響。'],
+['port','東京港','東京都','首都圏のコンテナ貨物と国内物流を支える港湾。','ターミナル運営・荷役管理システムの障害。','輸入貨物の滞留と流通への影響。'],
+['port','博多港','福岡県','九州とアジアを結ぶ港湾・旅客物流の拠点。','港湾情報システムや貨物データ連携の停止。','海上輸送や地域物流の混乱。'],
+['rail','品川駅','東京都','東海道新幹線と首都圏の複数路線が接続する拠点。','案内・予約・運行関連サービスの障害。','広域移動や乗換への影響。'],
+['rail','博多駅','福岡県','九州新幹線・山陽新幹線と地域鉄道の結節点。','旅客案内や運行情報の障害。','九州の広域交通と観光への影響。'],
+['energy','柏崎刈羽原子力発電所','新潟県','大規模発電設備を有する重要なエネルギー施設。稼働状況と供給寄与は時点により異なる。','業務系・委託先システムの障害と運用継続リスク。','安全管理上の対応や事業運営への影響。'],
+['energy','苫東厚真発電所','北海道','北海道の電力供給を支える主要な火力発電拠点の一つ。','運用支援システムや外部サービスの停止。','地域の電力供給計画や復旧対応への影響。'],
+['energy','東京湾岸エネルギー供給地域','東京都・神奈川県','首都圏の発電・燃料供給に関わる広域産業集積地域。','複数事業者間の情報連携や物流の障害。','燃料・電力関連の供給調整への影響。'],
+['communications','東京インターネット相互接続集積地域','東京都','国内外のネットワーク相互接続を担う事業者が集まる都市部。','広域通信障害やルーティング・認証基盤の不具合。','複数のオンラインサービスへの連鎖。'],
+['communications','大阪インターネット相互接続集積地域','大阪府','西日本の通信・データ流通を支える都市部の集積。','接続サービスの障害や委託先への依存。','関西圏のデジタルサービスへの影響。'],
+['water','利根川水系','関東地方','首都圏の水資源と治水に関わる広域水系。','水文データ・監視・連絡システムの停止。','水管理判断と関係機関の調整への影響。'],
+['water','淀川流域の浄水・配水ネットワーク','大阪府・京都府','関西の生活用水を支える複数自治体の水道インフラ。','監視・料金・運用情報システムの停止。','住民向け案内と水道業務の継続への影響。'],
+['medical','大阪大学医学部附属病院','大阪府','高度医療・研究・教育機能を担う大学病院。','電子カルテや医療情報システムの障害。','診療継続・患者受入れ・連携医療への影響。'],
+['medical','東京大学医学部附属病院','東京都','高度医療と臨床研究を担う大学病院。','医療情報システムの可用性低下や委託先リスク。','診療や医療連携への影響。'],
+['logistics','成田空港周辺航空貨物地域','千葉県','国際航空貨物の集荷・通関・配送が集中する地域。','貨物追跡・倉庫管理・データ交換の停止。','高付加価値貨物や製造業の供給網への影響。'],
+['logistics','名古屋港背後圏物流地域','愛知県','製造業と港湾を結ぶ物流ネットワークの集積地域。','物流管理や輸送計画の障害。','部品供給と輸出入への影響。'],
+['government','東京都庁','東京都','首都の行政サービスと広域防災調整を担う行政拠点。','行政情報サービス・認証基盤の停止。','住民サービスや災害対応の情報連携への影響。'],
+['government','大阪府庁','大阪府','大阪府域の行政サービス・危機管理を担う拠点。','行政業務システムの停止や情報漏えい。','住民手続きと関係機関の連携への影響。'],
+['road','関門橋','山口県・福岡県','本州と九州を結ぶ道路交通の重要経路。','道路交通情報や運営支援サービスの停止。','広域物流と迂回路への負荷。'],
+['road','明石海峡大橋','兵庫県','本州と淡路島を結ぶ道路ネットワークの要所。','交通情報・料金収受・運用支援サービスの障害。','地域間物流や交通計画への影響。']
+].map((s,i)=>({id:sites.length+i,domain:s[0],name:s[1],region:s[2],importance:s[3],risk:s[4],impact:s[5]}));
+const allSites=[...sites,...additionalSites];
+const imageByDomain={
+ airport:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80',
+ port:'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=900&q=80',
+ road:'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80',
+ rail:'https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=900&q=80',
+ energy:'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=900&q=80',
+ communications:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80',
+ water:'https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=900&q=80',
+ medical:'https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=900&q=80',
+ logistics:'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=900&q=80',
+ government:'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=900&q=80'
+};
+const domainBaseline={airport:[4,3,4,4,3],port:[4,3,4,4,3],road:[4,3,3,3,3],rail:[4,3,4,4,3],energy:[5,4,5,4,5],communications:[5,4,5,5,4],water:[5,4,5,3,5],medical:[5,3,4,4,5],logistics:[4,3,4,4,3],government:[4,3,4,4,4]};
+const scoreAxes=[{id:'impact',label:'社会的影響',weight:30},{id:'substitution',label:'代替の難しさ',weight:20},{id:'cascade',label:'分野間の波及',weight:20},{id:'digital',label:'デジタル依存度',weight:15},{id:'recovery',label:'復旧の複雑さ',weight:15}];
+function assess(site){
+ const values=domainBaseline[site.domain]||[3,3,3,3,3];
+ const axes=scoreAxes.map((axis,i)=>({...axis,value:values[i]}));
+ return {axes,score:Math.round(axes.reduce((total,a)=>total+a.weight*a.value/5,0)),confidence:'D',method:'分野別の暫定推定'};
 }
+function report(site){
+ const sector=domains.find(d=>d.id===site.domain)?.name||'重要インフラ';
+ return [
+ ['評価対象と公共的重要性',site.name+'は'+site.region+'に位置する、または同地域を代表する'+sector+'の分析対象である。'+site.importance+' 本評価では、施設の公開情報で確認できる社会的機能と、同分野に共通するサービス継続上の課題を区別する。地域や集積地を対象とする場合、個々の設備・事業者の状態を推定しているわけではない。'],
+ ['依存関係と波及経路', '重要インフラの障害は、単独の施設内にとどまらず、利用者、関連事業者、輸送・通信・電力などの周辺サービスに伝播し得る。'+site.impact+' ただし、実際の波及範囲は発生時刻、運用体制、代替経路、季節的な需要、他組織との連携に左右される。公開情報だけでは正確な被害人数や停止時間を断定できない。'],
+ ['サイバー脅威の評価', 'この分野で検討すべきシナリオには、'+site.risk+' そのほか、外部委託先のアカウント管理、業務ネットワークと制御系の境界、ソフトウェア更新、バックアップの健全性、クラウド・通信事業者への依存を確認する必要がある。これらは一般的な脅威シナリオであり、当該施設に実在する脆弱性や攻撃の兆候を示すものではない。'],
+ ['継続性と回復力', '分析上の重要な問いは、障害を完全に防げるかだけではなく、発生時に安全な縮退運転や手作業への切替が可能か、情報共有が維持できるか、代替サービスを確保できるかである。復旧時間目標、訓練頻度、バックアップの隔離、復旧時の優先順位などは、公開情報だけでは個別施設ごとに十分確認できないため、断定を避ける。'],
+ ['スコアの読み方と不確実性','CWRI-ICの値は社会的影響30%、代替困難性20%、分野間波及20%、デジタル依存15%、復旧複雑性15%を各5段階で重み付けした参考指標である。現在は分野別の共通仮定を使用し、個別施設の監査、稼働率、事故履歴、機密情報を採点に使っていない。同分野の施設は同じ暫定点になる。信頼度D（個別根拠未検証）として扱い、施設固有の危険度ランキングや侵害確率と解釈してはならない。'],
+ ['追加検証が必要な情報','今後は事業者・所管省庁の公式資料、年次報告、サービス停止の公表、関連するJPCERT/CC・NISC・CISAの注意喚起、事業継続に関する公開情報を照合し、評価時点と参照URLを明示する。一次資料が確認できない項目は「証拠不十分」と表示し、数値を事実として扱わない。']
+ ].map(([title,body])=>({title,body}));
+}
+
 export default function InfrastructureAtlas(){
- const [domain,setDomain]=useState('all'),[selected,setSelected]=useState(null),[query,setQuery]=useState(''),[detailOpen,setDetailOpen]=useState(false),[mobileList,setMobileList]=useState(false);
- const items=sites.filter(s=>(domain==='all'||s.domain===domain)&&[s.name,s.region,s.importance].join(' ').toLowerCase().includes(query.trim().toLowerCase()));
- const active=selected&&items.find(s=>s.id===selected.id);
- const chooseSite=s=>{setSelected(s);setDetailOpen(false)};
- const moveSite=delta=>{const index=items.findIndex(s=>s.id===active?.id);if(items.length)chooseSite(items[(index+delta+items.length)%items.length])};
- const choose=d=>{setDomain(d);setSelected(null);setDetailOpen(false)};
- return <section className="atlas atlas-v2">
- <div className="atlas-heading atlas-heading-compact"><span className="cw-kicker">JAPAN / GEO INTELLIGENCE</span><h2>日本の重要インフラ</h2><p>地図のピンと拠点カードが連動。公開情報から社会的な重要性と想定リスクを読み解きます。</p><div className="atlas-summary"><span><b>{sites.length}</b> 収録拠点</span><span><b>{domains.length}</b> 分野</span><span>リスクスコア <b>未評価</b></span></div></div>
- <div className="atlas-domains atlas-domains-v2"><button type="button" className={'atlas-domain '+(domain==='all'?'is-active':'')} onClick={()=>choose('all')}><span>▦</span>すべて</button>{domains.map(d=><button type="button" key={d.id} className={'atlas-domain '+(domain===d.id?'is-active':'')} onClick={()=>choose(d.id)}><span>{d.icon}</span>{d.name}</button>)}</div>
- <div className="atlas-layout atlas-layout-v2"><div className="atlas-map-wrap"><div className="atlas-map-top"><strong>JAPAN / INFRASTRUCTURE MAP</strong><span>{items.length} 拠点を表示</span></div><JapanMap items={items} selected={active} onSelect={chooseSite}/>
- <div className="atlas-mobile-overlay">{active?<article className="atlas-floating-card"><div className="atlas-floating-main"><div><small>{domains.find(d=>d.id===active.domain)?.icon} {domains.find(d=>d.id===active.domain)?.name} / {active.region}</small><strong>{active.name}</strong><span>重要性：{active.importance}</span></div><button type="button" aria-label="選択解除" onClick={()=>setSelected(null)}>×</button></div><div className="atlas-floating-actions"><button type="button" onClick={()=>moveSite(-1)} aria-label="前の拠点">‹ 前へ</button><button type="button" onClick={()=>{setDetailOpen(v=>!v)}}>{detailOpen?'詳細を閉じる':'重要性・リスクを見る'} ▾</button><button type="button" onClick={()=>moveSite(1)} aria-label="次の拠点">次へ ›</button></div>{detailOpen&&<div className="atlas-floating-details"><b>想定リスク</b><p>{active.risk}</p><b>障害時の影響</b><p>{active.impact}</p><small>一般的なリスクの解説であり、実際の脆弱性や攻撃を示すものではありません。</small></div>}</article>:<div className="atlas-floating-prompt">◎ 地図のピンを選ぶと、ここに拠点情報が表示されます。</div>}</div>
- <small>地図上の点は公開情報に基づく代表位置・地域の目安です。設備の正確な所在地や脆弱箇所を示しません。</small></div>
- <div className="atlas-panel atlas-panel-v2"><div className="atlas-panel-title"><span>INFRASTRUCTURE DIRECTORY</span><h3>重要拠点を探す <small>{items.length}件</small></h3></div><label className="atlas-search"><span>⌕</span><input aria-label="拠点名・地域で検索" placeholder="拠点名・地域で検索" value={query} onChange={e=>{setQuery(e.target.value);setSelected(null)}}/></label><div className="atlas-site-list">{items.length?items.map(s=><button type="button" key={s.id} className={'atlas-site '+(active?.id===s.id?'is-active':'')} onClick={()=>chooseSite(s)}><span className="atlas-site-symbol">{domains.find(d=>d.id===s.domain)?.icon}</span><span><strong>{s.name}</strong><small>{domains.find(d=>d.id===s.domain)?.name} · {s.region}</small></span><b>›</b></button>):<p className="atlas-hint">条件に一致する拠点がありません。</p>}</div>{active&&<article className="atlas-detail atlas-desktop-detail"><span className="cw-kicker">INFRASTRUCTURE PROFILE</span><h3>{active.name}</h3><p className="atlas-region">{active.region}</p><h4>なぜ重要なのか</h4><p>{active.importance}</p><h4>想定されるサイバーリスク</h4><p>{active.risk}</p><h4>障害時の影響</h4><p>{active.impact}</p><p className="atlas-note">実際の攻撃や脆弱性を示す情報ではありません。拠点別リスクスコアは未評価です。</p></article>}</div></div>
- <p className="atlas-disclaimer">掲載拠点は代表例です。モックにあった危険度ランキング・高リスク件数・監視件数は、根拠のない数値を避けるため表示していません。</p>
+ const [domain,setDomain]=useState('all'),[query,setQuery]=useState(''),[selected,setSelected]=useState(null),[sort,setSort]=useState('score'),[expanded,setExpanded]=useState(false);
+ const filtered=allSites.filter(s=>(domain==='all'||s.domain===domain)&&[s.name,s.region,s.importance].join(' ').toLowerCase().includes(query.trim().toLowerCase())).sort((a,b)=>sort==='name'?a.name.localeCompare(b.name,'ja'):sort==='region'?a.region.localeCompare(b.region,'ja'):assess(b).score-assess(a).score||a.id-b.id);
+ const shown=expanded?filtered:filtered.slice(0,8);
+ const active=allSites.find(s=>s.id===selected);
+ const profile=active?assess(active):null;
+ return <section className="atlas atlas-directory">
+ <header className="atlas-directory-hero"><div><span className="cw-kicker">CYBER WORLD / INFRASTRUCTURE INTELLIGENCE</span><h2>日本の重要インフラ</h2><p>社会を支える拠点と、その重要性を読み解く。</p></div><div className="atlas-directory-stats"><span><b>{allSites.length}</b>収録対象</span><span><b>{domains.length}</b>分野</span><span><b>5</b>評価軸</span></div></header>
+ <div className="atlas-method-strip"><strong>CWRI-IC</strong><span>社会的重要度の参考評価 / 100点</span><button type="button" onClick={()=>setSelected(-1)}>評価方法 ↗</button></div>
+ <div className="atlas-directory-controls"><label className="atlas-directory-search"><span>⌕</span><input type="search" aria-label="施設・地域を検索" placeholder="施設・地域を検索" value={query} onChange={e=>{setQuery(e.target.value);setExpanded(false)}}/></label><select aria-label="並び替え" value={sort} onChange={e=>setSort(e.target.value)}><option value="score">重要度順</option><option value="name">名称順</option><option value="region">地域順</option></select></div>
+ <nav className="atlas-directory-domains" aria-label="分野を選択"><button className={domain==='all'?'active':''} onClick={()=>{setDomain('all');setExpanded(false)}}>すべて <small>{allSites.length}</small></button>{domains.map(d=><button key={d.id} className={domain===d.id?'active':''} onClick={()=>{setDomain(d.id);setExpanded(false)}}><span>{d.icon}</span>{d.name} <small>{allSites.filter(s=>s.domain===d.id).length}</small></button>)}</nav>
+ <div className="atlas-directory-count"><strong>重要拠点一覧</strong><small>{filtered.length}件 / 写真は分野のイメージ</small></div>
+ <div className="atlas-directory-grid">{shown.map(s=>{const a=assess(s);return <button className="atlas-directory-card" type="button" key={s.id} onClick={()=>setSelected(s.id)}><div className="atlas-directory-photo"><img src={imageByDomain[s.domain]} alt={domains.find(d=>d.id===s.domain)?.name+'を表すイメージ写真'} loading="lazy" referrerPolicy="no-referrer"/><span>ILLUSTRATIVE IMAGE</span></div><div className="atlas-directory-info"><div className="atlas-directory-meta">{domains.find(d=>d.id===s.domain)?.name} / {s.region}</div><h3>{s.name}</h3><p>{s.importance}</p><div className="atlas-directory-bottom"><span>暫定評価・信頼度D</span><strong>{a.score}<small>/100</small></strong></div></div></button>})}</div>
+ {!filtered.length&&<p className="atlas-directory-empty">該当する拠点はありません。検索条件を変更してください。</p>}
+ {filtered.length>8&&<button className="atlas-directory-more" type="button" onClick={()=>setExpanded(v=>!v)}>{expanded?'最初の8件に戻す':'さらに '+(filtered.length-8)+' 件を表示 ↓'}</button>}
+ <p className="atlas-directory-caveat">CWRI-ICは独自の社会的重要度指標です。実際の脆弱性・侵害確率・個別施設の安全性を測定するものではありません。現時点の点数は分野別の暫定推定で、個別検証が不足しています。</p>
+ {(active||selected===-1)&&<div className="atlas-modal-backdrop" onClick={()=>setSelected(null)}><article className="atlas-profile" role="dialog" aria-modal="true" aria-label={active?active.name+'の分析':'評価方法'} onClick={e=>e.stopPropagation()}><button className="atlas-profile-close" type="button" onClick={()=>setSelected(null)} aria-label="閉じる">×</button>{active?<><div className="atlas-profile-image"><img src={imageByDomain[active.domain]} alt="分野のイメージ写真" /><span>分野イメージ・施設の実写ではありません</span></div><div className="atlas-profile-content"><span className="cw-kicker">INFRASTRUCTURE INTELLIGENCE PROFILE</span><h2>{active.name}</h2><p className="atlas-profile-region">{active.region} / {domains.find(d=>d.id===active.domain)?.name}</p><div className="atlas-profile-score"><div><small>CWRI-IC / 暫定社会的重要度</small><strong>{profile.score}<small>/100</small></strong><span>信頼度D・個別根拠未検証</span></div><div>{profile.axes.map(a=><div className="atlas-axis" key={a.id}><span>{a.label}</span><meter min="0" max="5" value={a.value}/><b>{a.value}/5</b></div>)}</div></div><p className="atlas-profile-warning">このスコアは施設の危険性やサイバー攻撃の成功確率ではありません。分野共通の仮定に基づく編集上の暫定値です。</p>{report(active).map((part,i)=><section key={i}><h3>{String(i+1).padStart(2,'0')} / {part.title}</h3><p>{part.body}</p></section>)}<div className="atlas-profile-sources"><h3>調査・参照先</h3><p>個別施設に関する一次資料の照合は未完了です。以下は分野横断的な評価枠組みの参照先であり、施設固有の評価を裏付けるものではありません。</p><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noreferrer">NIST Cybersecurity Framework 2.0</a><a href="https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience" target="_blank" rel="noreferrer">CISA Critical Infrastructure Security & Resilience</a><a href="https://www.nisc.go.jp/" target="_blank" rel="noreferrer">NISC 内閣サイバーセキュリティセンター</a></div></div></>:<div className="atlas-profile-content"><span className="cw-kicker">METHODOLOGY / CWRI-IC v0.1</span><h2>評価方法と限界</h2><p>世界のサイバーリスク・レジリエンスの考え方を参考にした、CYBER WORLD独自の参考指標です。国際機関の認定や公式スコアではありません。</p>{scoreAxes.map(a=><section key={a.id}><h3>{a.label} / {a.weight}%</h3><p>各分野の一般的な依存関係を1〜5の尺度で暫定評価。実施設の監査・公開資料による個別検証は未完了です。</p></section>)}<p>計算式：各軸の（5段階評価 ÷ 5）× 重みを合計し、100点に換算。現在は同じ分野の施設に同じ値を割り当てています。数値を施設間の確定的な優劣として使用しないでください。</p></div>}</article></div>}
  </section>;
 }
