@@ -17,7 +17,7 @@ function incidentCategory(e){const t=[e.title,e.type,e.summary].join(' ').toLowe
 const INCIDENT_ART={ 'ランサムウェア':'🔒','国家・APT':'◎','サプライチェーン':'⛓','重要インフラ':'⚡','情報漏えい':'◈','DDoS・障害':'◉','脆弱性悪用':'◇','その他':'▣'};
 function IncidentVisual({incident}){const cat=incidentCategory(incident);return <div className={'cw-case-art cw-art-'+INCIDENT_CATEGORIES.indexOf(cat)} role="img" aria-label={cat+'を表す装飾イラスト'}><div className="cw-case-art-grid"/><span>{INCIDENT_ART[cat]}</span><small>CYBER WORLD / INCIDENT</small></div>}
 const HISTORY_YEARS=Array.from({length:17},(_,i)=>2026-i);
-const libraryDomains=[featuredEncyclopedia,...encyclopedia,...infrastructure].map(group=>({...group,articles:[...additionalAnalysisArticles.filter(a=>a.category===group.name),...domainOriginalArticles.filter(a=>a.category===group.name),...group.articles]}));
+const libraryDomains=[featuredEncyclopedia,...encyclopedia,...infrastructure].map(group=>({...group,name:group.name.replace(/^日本のインフラ\s*\/\s*/,''),articles:[...additionalAnalysisArticles.filter(a=>a.category===group.name),...domainOriginalArticles.filter(a=>a.category===group.name),...group.articles]}));
 const terms=[
 {name:'ランサムウェア',category:'マルウェア',icon:'▣',description:'ファイルを暗号化するなどして利用を妨げ、金銭を要求する不正プログラム。',action:'重要なデータのバックアップと更新を継続する。'},
 {name:'フィッシング',category:'詐欺',icon:'⌁',description:'偽のメールやサイトを使い、IDやパスワードなどを盗み取る手口。',action:'リンク先のURLを確認し、公式アプリからアクセスする。'},
