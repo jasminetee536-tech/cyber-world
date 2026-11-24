@@ -184,3 +184,27 @@
 .tm-editorial-body h3{font-size:clamp(13px,3.5vw,19px);line-height:1.55;margin:0;font-weight:700;overflow-wrap:anywhere;word-break:normal}
 .tm-editorial-more{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;border-top:1px solid #254658;color:#78d9e8;font-size:11px}
 @media(min-width:700px){.tm-editorial-body{padding:18px;gap:12px}.tm-editorial-meta time,.tm-editorial-category,.tm-editorial-more{font-size:13px}.tm-editorial-meta .tm-score-ring{width:44px;height:44px}}
+
+/* Single-column intelligence report cards, scoped to the threat list. */
+.tm-page .tm-events{grid-template-columns:minmax(0,1fr);gap:14px}
+.tm-events .tm-editorial-card{position:relative;border:1px solid #345365;border-left:3px solid var(--severity,#79e8ff);border-radius:8px;background:linear-gradient(115deg,#102433,#0a1926)}
+.tm-events .tm-editorial-card:before{content:"";position:absolute;top:0;left:0;width:35%;height:1px;background:linear-gradient(90deg,transparent,#79e8ff,transparent);animation:tmReportScan 5s linear infinite;pointer-events:none}
+.tm-events .tm-editorial-body{padding:16px;gap:12px}
+.tm-events .tm-editorial-meta{min-height:0;color:#a9c3d2;font-size:11px;letter-spacing:.06em}
+.tm-events .tm-editorial-meta time{font-size:12px}
+.tm-report-main{display:grid;grid-template-columns:minmax(0,1fr) 86px;gap:16px;align-items:center}
+.tm-report-copy{min-width:0}
+.tm-events .tm-editorial-category{display:block;color:#9dd9e9;font-size:13px;margin-bottom:6px}
+.tm-events .tm-editorial-body h3{font-size:18px;line-height:1.55;color:#f2f7fb;font-weight:700;overflow-wrap:anywhere}
+.tm-report-summary{font-size:14px;line-height:1.75;color:#c0d2df;margin:8px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tm-report-meter{position:relative;text-align:center;color:var(--severity,#79e8ff);align-self:center}
+.tm-report-meter svg{width:100%;display:block}
+.tm-report-meter strong{position:absolute;top:0;left:0;width:100%;height:86px;display:grid;place-items:center;font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+.tm-report-meter small{font-size:11px;font-weight:700;letter-spacing:.08em}
+.tm-events .tm-editorial-more{font-size:13px;min-height:32px;align-items:center}
+.tm-report-signal{display:flex;align-items:center;gap:3px;height:16px}
+.tm-report-signal i{width:3px;height:12px;background:#68d7f0;opacity:.65;animation:tmReportPulse 2s ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.19s)}
+@keyframes tmReportScan{from{transform:translateX(-100%)}to{transform:translateX(300%)}}
+@keyframes tmReportPulse{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+@media(max-width:380px){.tm-events .tm-editorial-body{padding:12px}.tm-report-main{grid-template-columns:minmax(0,1fr) 72px;gap:10px}.tm-report-meter strong{height:72px;font-size:28px}.tm-events .tm-editorial-body h3{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.tm-events .tm-editorial-card:before,.tm-report-signal i{animation:none}}
