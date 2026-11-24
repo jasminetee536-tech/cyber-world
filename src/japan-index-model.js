@@ -174,8 +174,9 @@ export function evaluateDomain(id, rows=[]){
  const coverage=valid.reduce((s,x)=>s+x.w,0);
  return {coverage,score:coverage===100?valid.reduce((s,x)=>s+x.w*x.row.rating/5,0):null,confidence:coverage===100?(valid.some(x=>x.row.confidence==='low')?'low':valid.some(x=>x.row.confidence==='medium')?'medium':'high'):null};
 }
-export function evaluateIndex(observations={},previous={}){
- const entries=Object.entries(weights).map(([id,w])=>{const d=evaluateDomain(id,observations[id]);return {id,weight:w,...d,contribution:d.score===null?null:(isCapability(id)?100-d.score:d.score)*w/100,delta:d.score!==null&&Number.isFinite(previous[id])?d.score-previous[id]:null};});
+export const cwjiHistory=[]; // Retain validated observation snapshots across collection failures.
+export function evaluateIndex(observations={},previous={},history=cwjiHistory){
+ const entries=Object.entries(weights).map(([id,w])=>{const current=evaluateDomain(id,observations[id]); const fallback=current.score===null?history.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>({...evaluateDomain(id,x.observations?.[id]),date:x.date})).find(x=>x.score!==null):null; const d=fallback||current;return {id,weight:w,...d,status:fallback?'previous':current.score===null?'unavailable':'current',currentCoverage:current.coverage,contribution:d.score===null?null:(isCapability(id)?100-d.score:d.score)*w/100,delta:d.score!==null&&Number.isFinite(previous[id])?d.score-previous[id]:null};});
  const coverage=entries.reduce((s,e)=>s+e.weight*e.coverage/100,0);
  const score=entries.every(e=>e.score!==null)?entries.reduce((s,e)=>s+e.contribution,0):null;
  return {entries,coverage,score};
