@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-24",
+  "coverage": "partial; IPA and Wiz sources; not a comprehensive daily scan",
+  "observations": [
+    {
+      "id": "CVE-2026-123890",
+      "source": "https://www.ipa.go.jp/security/security-alert/2026/alert20261124.html",
+      "published": "2026-11-24",
+      "status": "official advisory; exploitation reported by IPA citing GTIG and KEV",
+      "articleId": "watch-202611-0",
+      "sector": "virtualization",
+      "fact": "国内のIPAが認証回避脆弱性について修正を推奨。国内被害数は不明。",
+      "forecast": "fi-02",
+      "relation": "変更管理と共通管理基盤の依存性。障害発生の証拠ではない。"
+    },
+    {
+      "id": "PHP2Shell",
+      "source": "https://www.wiz.io/blog/php2shell-php-rce",
+      "published": "2026-10-21",
+      "status": "researcher disclosure",
+      "fact": "AIを利用したPHP脆弱性発見の研究公表。実環境の攻防速度の比較は未確定。",
+      "forecast": "fi-03",
+      "relation": "AIによる発見能力の変化。自律的な業務判断の事故とは区別する。"
+    },
+    {
+      "id": "PHP-202611-release",
+      "source": "https://www.ipa.go.jp/security/security-alert/2026/pre-alert20261119.html",
+      "published": "2026-11-19",
+      "status": "official preventive advisory",
+      "fact": "IPAがPHP更新前の資産棚卸しを推奨。予告時点で悪用未確認。",
+      "forecast": "fi-02",
+      "relation": "緊急修正の準備と運用リスク。実際の変更障害は未確認。"
+    }
+  ],
+  "missing": [
+    "国内被害統計",
+    "比較可能な攻防速度",
+    "社会的関心度の実測",
+    "その他の情報源"
+  ]
+}
