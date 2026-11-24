@@ -1,0 +1,30 @@
+/* CYBER WORLD / shared cinematic visual system */
+.cw-app{--cw-neon:#65ddff;--cw-amber:#ff9d42;--cw-gold:#f5d36b;--cw-space:#050b14;isolation:isolate;background:radial-gradient(ellipse at 85% 12%,#12304766,transparent 48%),#050b14;min-height:100vh}
+.cw-app:before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(#36a9d00b 1px,transparent 1px),linear-gradient(90deg,#36a9d00b 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(transparent,#000 35%,#000)}
+.cw-app .cw-sticky-header{border-bottom:1px solid #377a95;box-shadow:0 2px 18px #26caff12;background:rgba(5,13,24,.96)}
+.cw-app .cw-main{position:relative}
+.cw-app .cw-main:after{content:'';position:absolute;inset:0 0 auto;height:2px;pointer-events:none;background:linear-gradient(90deg,transparent,#61e6ff,transparent);opacity:0;animation:cw-arrival-line .48s ease-out}
+.cw-app .cw-main>div,.cw-app .cw-main>section{animation:cw-arrival .36s cubic-bezier(.2,.7,.2,1) both}
+@keyframes cw-arrival{from{opacity:.25;transform:translateY(7px);filter:brightness(1.35)}to{opacity:1;transform:none;filter:none}}
+@keyframes cw-arrival-line{0%{opacity:.8;transform:translateY(0)}100%{opacity:0;transform:translateY(100px)}}
+.cw-app .cw-menu-overlay{z-index:1100;background:#020812d9;backdrop-filter:blur(8px);animation:cw-veil .25s ease-out}
+.cw-app .cw-menu-drawer{position:relative;background:radial-gradient(ellipse at 100% 0%,#143b50,#081321 55%);border-left:1px solid #6adfff;box-shadow:-12px 0 45px #25bfff22;animation:cw-teleport .42s cubic-bezier(.16,.8,.22,1) both}
+.cw-app .cw-menu-drawer:before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#67e6ff,#f5d36b,transparent);box-shadow:0 0 12px #55dfff;pointer-events:none;animation:cw-menu-scan .48s ease-out both}
+@keyframes cw-veil{from{opacity:0}to{opacity:1}}
+@keyframes cw-teleport{0%{opacity:0;transform:translateX(30px) scaleX(.94);clip-path:inset(0 0 0 85%)}45%{opacity:1;clip-path:inset(0 0 0 0)}100%{opacity:1;transform:none;clip-path:inset(0)}}
+@keyframes cw-menu-scan{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(75vh)}}
+.cw-app .cw-menu-group button{border-color:#284c60;transition:background .18s,border-color .18s,box-shadow .18s}
+.cw-app .cw-menu-group button.active{border-color:#66dfff;box-shadow:inset 3px 0 #66dfff;background:#123247}
+.cw-app .cw-menu-group>small{color:#f0bd79}
+.cw-app :is(.cw-fi-hero,.tm-weekly-panel,.tm-hero,.atlas-directory-hero,.cw-research-hero,.cw-library-hero,.cw-archive-hero,.cw-analysis-hero,.ic-hero){position:relative;border-color:#315d75;background-image:radial-gradient(ellipse at 95% 5%,#ff9d4210,transparent 45%),linear-gradient(120deg,#0a1c2d,#07111e 75%);box-shadow:inset 0 1px #65ddff20}
+.cw-app :is(.cw-fi-hero,.tm-weekly-panel,.tm-hero,.atlas-directory-hero,.cw-research-hero,.cw-library-hero,.cw-archive-hero,.cw-analysis-hero,.ic-hero):before{content:'';position:absolute;top:0;right:12px;width:clamp(40px,15%,120px);height:2px;background:linear-gradient(90deg,transparent,#ffad55);box-shadow:0 0 9px #ff9d4266;pointer-events:none}
+.cw-app :is(.cw-fi-card,.atlas-directory-card,.cw-research-card,.cw-research-panel,.cw-case-card,.cw-term-card,.cw-library-article,.ic-brief,.ic-node){border-color:#31576d;transition:border-color .2s,box-shadow .2s}
+.cw-app :is(.cw-fi-card,.atlas-directory-card,.cw-research-card,.cw-case-card,.cw-term-card,.ic-brief):hover{border-color:#65ddff;box-shadow:0 0 18px #29caff16}
+.cw-app :is(.cw-kicker,.ic-section>small){color:#8bd5e9}
+.cw-app .ic-brief>small,.cw-app .cw-research-card>small{color:#ffc17d}
+.cw-app .ic-brief{border-left:2px solid #ffad55}
+.cw-app .ic-chain>div:nth-child(3){border-left-color:#ffad55;background:linear-gradient(90deg,#ff9d4212,transparent)}
+.cw-app .ic-chain>div:nth-child(3) b{color:#ffb86c}
+.cw-app .ic-node-2,.cw-app .ic-node-3{border-bottom-color:#ffad5588}
+.cw-app button:focus-visible,.cw-app a:focus-visible{outline:2px solid #75e5ff;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.cw-app .cw-main>div,.cw-app .cw-main>section,.cw-app .cw-main:after,.cw-app .cw-menu-overlay,.cw-app .cw-menu-drawer,.cw-app .cw-menu-drawer:before{animation:none!important}.cw-app .cw-menu-drawer:before{opacity:0}}
