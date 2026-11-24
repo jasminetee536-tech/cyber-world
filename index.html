@@ -19,5 +19,19 @@
 <meta name="twitter:description" content="サイバー脅威・重要インフラ・脆弱性を公開情報から分析。"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"CYBER WORLD","url":"https://cyber-world.jasminetee536.workers.dev/","inLanguage":"ja","description":"日本のサイバー脅威と重要インフラのリスクを公開情報に基づいて解説する情報サイト"}</script>
 </head>
-<body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+<body><div id="root"></div><script type="module" src="/src/main.jsx"></script><script type="module">
+const preferred=(navigator.languages?.[0]||navigator.language||'ja').toLowerCase();
+if(!preferred.startsWith('ja')){
+ const dictionary={'ホーム':'Home','メニュー':'Menu','脅威モニター':'Threat Monitor','未来予測':'Future Forecast','AI分析':'AI Analysis','サイバー図鑑':'Cyber Encyclopedia','日本インフラ':'Japan Infrastructure','重要インフラ':'Critical Infrastructure','事件年表':'Incident Timeline','情報基盤':'Intelligence Database','研究':'Research','情報連関分析':'Intelligence Correlation','分析レポート':'Analysis Reports','地政学・経済安全保障':'Geopolitics & Economic Security','災害分析':'Disaster Analysis','国家レジリエンス':'National Resilience','サイバー脅威':'Cyber Threats','AIリスク':'AI Risk','サイバー防御力':'Cyber Defense','復旧力':'Recovery Capacity','今週のキーワード':'Weekly Keywords','カテゴリー':'Category','すべてのカテゴリー':'All Categories','すべて':'All','採点詳細':'Scoring Details','未評価':'Not assessed','観測データ収集中':'Collecting evidence','閉じる':'Close','サイトを探索':'Explore the site'};
+ const root=document.getElementById('root'), seen=new WeakMap(), cache=new Map();
+ let translator=null, running=false, pending=false;
+ const jp=/[\u3040-\u30ff\u3400-\u9fff]/;
+ const translate=async value=>{const key=value.trim();if(dictionary[key])return value.replace(key,dictionary[key]);if(!translator)return value;if(!cache.has(value))cache.set(value,translator.translate(value).catch(()=>value));return cache.get(value)};
+ async function scan(){if(running){pending=true;return}running=true;try{const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const jobs=[];while(walker.nextNode()){const n=walker.currentNode,v=n.nodeValue;if(!jp.test(v)||seen.get(n)===v||n.parentElement?.closest('script,style,textarea,code,pre,svg,[translate="no"]'))continue;jobs.push([n,v])}for(let i=0;i<jobs.length;i+=12)await Promise.all(jobs.slice(i,i+12).map(async ([n,v])=>{const out=await translate(v);if(n.isConnected&&n.nodeValue===v&&out!==v){seen.set(n,out);n.nodeValue=out}}));}finally{running=false;if(pending){pending=false;queueMicrotask(scan)}}}
+ new MutationObserver(scan).observe(root,{subtree:true,childList:true,characterData:true});scan();
+ async function enable(){try{if(!globalThis.Translator)return;const opts={sourceLanguage:'ja',targetLanguage:'en'};if(await Translator.availability(opts)==='available'){translator=await Translator.create(opts);document.documentElement.lang='en';scan()}}catch{}}
+ enable();
+ document.title='CYBER WORLD | Japan Cyber Intelligence';
+}
+</script></body>
 </html>
