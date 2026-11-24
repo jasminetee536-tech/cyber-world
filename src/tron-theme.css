@@ -28,3 +28,10 @@
 .cw-app .ic-node-2,.cw-app .ic-node-3{border-bottom-color:#ffad5588}
 .cw-app button:focus-visible,.cw-app a:focus-visible{outline:2px solid #75e5ff;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.cw-app .cw-main>div,.cw-app .cw-main>section,.cw-app .cw-main:after,.cw-app .cw-menu-overlay,.cw-app .cw-menu-drawer,.cw-app .cw-menu-drawer:before{animation:none!important}.cw-app .cw-menu-drawer:before{opacity:0}}
+
+/* Keep fixed detail overlays viewport-relative, above sticky navigation. */
+.cw-app .cw-main>div:has(:is(.tm-overlay,.cw-fi-overlay,.overlay,.atlas-modal-backdrop,.atlas-sector-backdrop)),.cw-app .cw-main>section:has(:is(.tm-overlay,.cw-fi-overlay,.overlay,.atlas-modal-backdrop,.atlas-sector-backdrop)){animation:none!important;transform:none!important;filter:none!important;contain:none!important;will-change:auto!important;z-index:auto!important}
+.cw-app :is(.tm-overlay,.cw-fi-overlay,.overlay,.atlas-modal-backdrop,.atlas-sector-backdrop){position:fixed!important;inset:0!important;z-index:15000!important;box-sizing:border-box;overflow:hidden;overscroll-behavior:contain;padding: max(24px,env(safe-area-inset-top)) 12px max(20px,env(safe-area-inset-bottom))!important;align-items:center}
+.cw-app :is(.tm-overlay,.cw-fi-overlay,.overlay,.atlas-modal-backdrop,.atlas-sector-backdrop)>:first-child{max-height:100%!important;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.cw-app .tm-method-dialog .tm-article-content{padding-top:52px}
+@media(max-width:600px){.cw-app :is(.tm-overlay,.cw-fi-overlay,.overlay,.atlas-modal-backdrop,.atlas-sector-backdrop){padding-top:max(32px,env(safe-area-inset-top))!important}.cw-app .tm-method-dialog .tm-article-content{padding:52px 20px 28px}}
