@@ -36,7 +36,7 @@ const sourceDates = {
 };
 const siteDate = latestDay(Object.values(sourceDates));
 
-export default function PageUpdate({ page, reviewDates = [] }) {
+export default function PageUpdate({ page, reviewDates = [], badge }) {
   const sources = pageSources[page] ?? Object.keys(sourceDates);
   const date = latestDay([
     ...sources.map(key => sourceDates[key]),
@@ -44,9 +44,11 @@ export default function PageUpdate({ page, reviewDates = [] }) {
   ]);
   const displayedDate = date ?? siteDate;
   if (!displayedDate) return null;
+  const formatted = displayedDate.replaceAll('-', '.');
+  if (badge) return <span className="tm-status"><time dateTime={displayedDate} title="更新日">{formatted}</time> / {badge}</span>;
 
   return <div className="cw-page-update">
     <span>{date ? '更新日' : 'サイト更新日'}</span>
-    <time dateTime={displayedDate}>{displayedDate.replaceAll('-', '.')}</time>
+    <time dateTime={displayedDate}>{formatted}</time>
   </div>;
 }
