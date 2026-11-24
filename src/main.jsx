@@ -14,6 +14,7 @@ import ErrorBoundary from './ErrorBoundary.jsx';
 import Research from './Research.jsx';
 import FutureIntelligence from './FutureIntelligence.jsx';
 import IntelligenceCore from './IntelligenceCore.jsx';
+import './tron-theme.css';
 
 import {incidents,annualSummary,incidentFollowupSummary,calibrateIncidentScore} from './incident-data.js';
 import CWRIAutomation from './CWRIAutomation.jsx';
@@ -56,7 +57,7 @@ const nav=[['⌂','ホーム'],['▤','情報連関分析'],['◉','脅威モニ
 const article=(p,i)=> <button key={p.id||i} className="cw-article" onClick={()=>setSelected(p)}><span className="cw-article-index">{String(i+1).padStart(2,'0')}</span><span className="cw-article-body"><small>{p.source}　/　{p.date||'日付未取得'}</small><strong>{p.title}</strong><span>{p.description||'詳細は公式サイトでご確認ください。'}</span></span><span className="cw-article-arrow">↗</span></button>;
 return <div className="app cw-app">
 <header className="topbar cw-sticky-header"><button className="brand" onClick={()=>go('ホーム')}><span className="brand-symbol">◎</span><span className="brand-name">CYBER<span>WORLD</span><small>JAPAN CYBER INTELLIGENCE</small></span></button><nav className="nav cw-nav-primary">{nav.filter(([,name])=>['ホーム','脅威モニター','サイバー図鑑','日本インフラ','事件年表'].includes(name)).map(([ico,name])=><button key={name} className={section===name?'active':''} onClick={()=>go(name)}><span>{ico}</span>{name}</button>)}</nav><div className="header-tools"><span className="cw-header-status"><i/> JAPAN WATCH</span><button type="button" className="cw-menu-toggle" aria-expanded={menuOpen} aria-controls="cw-site-menu" onClick={()=>setMenuOpen(v=>!v)}><span className="cw-menu-lines">☰</span> メニュー</button></div></header>{menuOpen&&<div className="cw-menu-overlay" onClick={()=>setMenuOpen(false)}><aside id="cw-site-menu" className="cw-menu-drawer" role="dialog" aria-modal="true" aria-label="サイトメニュー" onClick={e=>e.stopPropagation()}><div className="cw-menu-head"><div><small>CYBER WORLD / NAVIGATION</small><h2>サイトを探索</h2></div><button aria-label="メニューを閉じる" onClick={()=>setMenuOpen(false)}>×</button></div><div className="cw-menu-group"><small>INTELLIGENCE / 情勢を知る</small>{nav.filter(([,n])=>['ホーム','情報連関分析','脅威モニター','日本インフラ','事件年表','分析レポート'].includes(n)).map(([ico,n])=><button key={n} className={section===n?'active':''} onClick={()=>go(n)}><span>{ico}</span><strong>{n}</strong><i>↗</i></button>)}</div><div className="cw-menu-group"><small>KNOWLEDGE / 理解を深める</small>{nav.filter(([,n])=>['サイバー図鑑','未来予測','研究','コンセプト'].includes(n)).map(([ico,n])=><button key={n} className={section===n?'active':''} onClick={()=>go(n)}><span>{ico}</span><strong>{n}</strong><i>↗</i></button>)}</div><p>日本を起点に、世界のサイバー情勢を読み解く。</p></aside></div>}
-<main className="cw-main">
+<main className="cw-main" key={section}>
 {section==='研究'&&<Research/>}
 {(section==='ホーム'||section==='コンセプト')&&<IntelligenceCore go={go} incidents={displayedIncidents}/>}
 {section==='脅威モニター'&&<ThreatMonitor shadow={shadow} shadowError={shadowError}/>}
