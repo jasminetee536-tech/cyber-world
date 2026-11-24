@@ -647,7 +647,98 @@ const japanPerspectives=[
 '国内で該当するウェブ基盤を運用する場合、影響バージョンと設定を確認する必要があります。国内被害は未確認です。'
 ];
 const scoreLevel=score=>score>=85?'CRITICAL':score>=70?'HIGH':score>=50?'MEDIUM':score>=30?'LOW':'MINIMAL';
-export const threatWatchArticles=rawThreatWatchArticles.map((a,i)=>{
+
+const latestThreatArticles=[
+  {
+    "id": "watch-20261124-apim",
+    "title": "Azure API Managementの認証情報が標的に：修正後も残るクラウドの信頼リスク",
+    "date": "2026-11-24",
+    "category": "脆弱性",
+    "priority": "HIGH",
+    "sector": "クラウド・エネルギー",
+    "summary": "ノルウェー国家安全保障当局（NSM）はAPI管理基盤の脆弱性と認証情報を狙う活動を公表。修正後も顧客側の認証情報更新が必要となる。",
+    "url": "https://nsm.no/fagomrader/digital-sikkerhet/digital-hendelseshandtering/varsler-fra-nsm/nsm-deler-tiltak-mot-sarbarhet-i-azure-api-management",
+    "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1000&q=80",
+    "scoreAxes": [
+      3,
+      3,
+      4,
+      4
+    ],
+    "japanPerspective": "API管理を外部委託する国内組織は、秘密情報の更新責任と下流サービスの監査範囲を確認すべきである。国内被害は未確認。",
+    "sections": [
+      {
+        "heading": "確認された事実",
+        "text": "NSMは11月20日に注意喚起し、23日に更新した。EquinorとSkagerak Energiを影響対象として挙げ、攻撃者がAPIMの秘密情報を標的にしたと説明している。ノルウェー企業の供給業務への影響を示す証拠は同当局の発表時点では得られていない。Microsoftの顧客向け通知を確認した専門報道によればClassic層が対象で、19日に緩和措置が実施された。通知原本を直接閲覧したわけではない。"
+      },
+      {
+        "heading": "独自分析｜修正と信頼回復の時間差",
+        "text": "APIゲートウェイは通信の入口であるだけでなく、背後のサービスに接続するための認証情報を保持する場合がある。したがって入口の修正は、新たな侵入経路の遮断にはなっても、既に取得された認証情報の無効化とは同義ではない。防御の完了条件をパッチ適用率だけで定義すると、認証情報が有効な期間を見落とす。下流サービス側で旧資格情報が拒否されることまで確認する必要がある。"
+      },
+      {
+        "heading": "日本への示唆",
+        "text": "国内の電力・金融・物流等でAPIを共用する場合、管理部門と接続先の運用部門が異なることがある。交換作業の担当者、旧資格情報の失効、依存アプリの疎通確認を一つの変更計画として管理することが重要だ。今回の公表は国内の特定企業の被害を立証するものではない。"
+      },
+      {
+        "heading": "採点根拠｜68点",
+        "text": "社会的影響3/5（21点）：エネルギー企業への影響は確認されたが供給停止の証拠はない。露出3/5（15点）：対象層・構成に制約がある。緊急性4/5（20点）：悪用と認証情報の更新必要性があるが対策は公表済み。波及4/5（12点）：複数分野のAPI依存と認証情報の再利用リスクを考慮するが、実際の連鎖被害は未確認。"
+      },
+      {
+        "heading": "反証と次の監視指標",
+        "text": "秘密情報の取得を試みた事実だけから、下流システムへの侵害や国家支援型活動を断定できない。今後は事業者の調査結果、旧認証情報の利用記録、対象構成の確定、顧客側の失効完了を確認する。"
+      },
+      {
+        "heading": "出典・確認日",
+        "text": "一次資料：NSM（11月20日公表、23日更新）。補足：BleepingComputer（11月23日）https://www.bleepingcomputer.com/news/security/microsoft-azure-flaw-exploited-to-steal-customers-api-credentials/ 。11月24日確認。公表事実の確度は高いが侵害規模は未確定。"
+      }
+    ]
+  },
+  {
+    "id": "watch-20261124-glinet",
+    "title": "GL.iNet遠隔管理サービス侵害：クラウド修正と端末復旧は別の問題",
+    "date": "2026-11-24",
+    "category": "サプライチェーン",
+    "priority": "MEDIUM",
+    "sector": "ネットワーク・遠隔管理",
+    "summary": "メーカーはクラウド管理サービスの脆弱性を悪用した一部ルーター・KVMへの不正ソフトウェア導入を確認。接続先PCへの影響は調査中。",
+    "url": "https://www.gl-inet.com/en-us/blogs/blog/glinet-security-notice-2026-11-20",
+    "image": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1000&q=80",
+    "scoreAxes": [
+      3,
+      3,
+      4,
+      3
+    ],
+    "japanPerspective": "遠隔保守用機器を調達する国内企業はクラウド管理の利用状況と端末復旧の責任分界を点検する。",
+    "sections": [
+      {
+        "heading": "確認された事実",
+        "text": "GL.iNetは11月20日にクラウド遠隔管理の脆弱性を公表した。第三者が一部のルーターとKVM機器に不正ソフトウェアを導入したことを認め、クラウド側の問題を修正した。被害機器の総数や接続されたコンピューターへの影響は確定していない。11月22日の専門報道は回収された不正プログラムの分析を報じた。"
+      },
+      {
+        "heading": "独自分析｜管理経路を資産として扱う",
+        "text": "遠隔管理機器はネットワークへの接続を提供するルーターと、画面・入力を遠隔操作できるKVMとで異なる信頼境界を持つ。共通クラウドが侵害されると、利用企業が直接公開していない機器にも影響し得る。クラウドサービスが正常に戻ることと、端末上の不正な変更が除去されることは別工程である。管理画面の正常表示だけで復旧を判定するのは不十分だ。"
+      },
+      {
+        "heading": "日本への示唆",
+        "text": "小規模拠点や無人設備で遠隔保守機器を利用する組織は、機器だけでなくクラウド管理アカウントと接続先の資産も管理台帳に含める必要がある。侵害が疑われる場合には証拠保全とメーカーのモデル別復旧手順を優先し、認証情報の更新要否を検討する。国内での被害は確認できていない。"
+      },
+      {
+        "heading": "採点根拠｜65点",
+        "text": "社会的影響3/5（21点）：機器への不正導入は確認済みだが大規模停止は未確認。露出3/5（15点）：共通クラウドを利用する機器が対象だが全製品への影響は不明。緊急性4/5（20点）：実際の侵害があり端末側の確認が必要。波及3/5（9点）：接続先へのリスクはあるが実際の二次侵害は未確定。"
+      },
+      {
+        "heading": "反証と監視指標",
+        "text": "接続先のコンピューターが操作可能であることは、実際に操作された証拠とは異なる。過去の不正ファイルと今回の事件の関連性も確定していない。メーカーによる影響機種、修正版、個別通知、接続先調査結果を優先して追跡する。"
+      },
+      {
+        "heading": "出典・確認日",
+        "text": "一次資料：GL.iNet（11月20日公表）。補足：BleepingComputer（11月22日）https://www.bleepingcomputer.com/news/security/hackers-exploit-glinet-cloud-flaw-to-infect-routers-kvm-devices/ 。11月24日確認。侵害発生の確度は高いが全体規模は未確定。"
+      }
+    ]
+  }
+];
+export const threatWatchArticles=[...latestThreatArticles.map(a=>{const score=a.scoreAxes.reduce((s,v,i)=>s+v*axisWeights[i]/5,0);return {...a,score,scoreLevel:scoreLevel(score),scoreConfidence:'暫定'};}),...rawThreatWatchArticles.map((a,i)=>{
  const scoreAxes=threatAxes[i];
  const score=scoreAxes.reduce((sum,v,j)=>sum+v*axisWeights[j]/5,0);
  const fact=a.sections.find(s=>s.heading==='確認された事実');
@@ -667,4 +758,4 @@ export const threatWatchArticles=rawThreatWatchArticles.map((a,i)=>{
  ];
  return {...a,score,scoreAxes,scoreLevel:scoreLevel(score),scoreConfidence:'暫定',japanPerspective:japanPerspectives[i],sections:caseSections};
 
-});
+})];
