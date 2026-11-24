@@ -26,16 +26,346 @@ export const AXIS_ANCHORS=[
 ];
 export const score=r=>Math.round(MODEL.axes.reduce((n,a)=>n+a.weight*r[a.id]/5,0));
 export const newsEvidence=[
-{title:'Microsoft 365の大規模障害：潜在バグ、ゲートウェイ障害、容量不足の複合',date:'2026-11-16',source:'The Guardian / Microsoftの説明を報道',url:'https://www.theguardian.com/technology/2026/nov/16/microsoft-global-outage-cause',fact:'複数の要因が重なったサービス障害。サイバー侵害が原因とは報じられていない。'},
-{title:'11月の障害群：Microsoft、FAA、金融・航空等',date:'2026-11-19',source:'Associated Press',url:'https://apnews.com/article/0c0f0cf4983a0f81ba88c4c4d2b8383f',fact:'複数の障害に共通する攻撃の証拠は確認されていない。'},
-{title:'11月の障害群に関する依存・帰属分析',date:'2026-11-18',source:'Cloud Security Alliance',url:'https://labs.cloudsecurityalliance.org/research/csa-research-note-november-outage-cluster-correlated-fragili/',fact:'複数障害の原因を区別しつつ、依存集中と帰属の問題を整理。'},
-{title:'AI開発ツールチェーンとサプライチェーンの動向',date:'2026-11-19',source:'Cloud Security Alliance',url:'https://labs.cloudsecurityalliance.org/research/ciso-daily-briefing-20261119/',fact:'AI開発・依存コンポーネントをめぐる脅威を報告。個別事案は一次情報による再確認が必要。'}
+  {
+    "title": "国内ランサム被害の高止まり",
+    "date": "2026-11-24（確認日）",
+    "source": "警視庁",
+    "url": "https://www.keishicho.metro.tokyo.lg.jp/kurashi/cyber/notes/ransomware_threat.html",
+    "fact": "警視庁は2026年上半期の報告を123件とし、2020年下半期以降の半期最多と説明した。"
+  },
+  {
+    "title": "委託先依存が生む国内企業の共通リスク",
+    "date": "2026-11-24（確認日）",
+    "source": "IPA",
+    "url": "https://www.ipa.go.jp/security/10threats/10threats2026.html",
+    "fact": "IPAの2026年組織向け評価では委託・供給網が第2位。"
+  },
+  {
+    "title": "生成AIと国内組織の新たな危機認識",
+    "date": "2026-11-24（確認日）",
+    "source": "IPA",
+    "url": "https://www.ipa.go.jp/security/10threats/10threats2026.html",
+    "fact": "IPAの2026年評価でAI関連リスクが初めて組織向け第3位に入った。"
+  },
+  {
+    "title": "国内の遠隔接続環境に残る管理上の課題",
+    "date": "2026-11-24（確認日）",
+    "source": "警察庁",
+    "url": "https://www.npa.go.jp/bureau/cyber/pdf/R7countermeasures_leaflet.pdf",
+    "fact": "警察庁の2026年1月資料では調査対象のVPN利用組織の52%が最新パッチ未適用だった。"
+  },
+  {
+    "title": "日本をめぐる標的型攻撃への警戒",
+    "date": "2026-11-24（確認日）",
+    "source": "警察庁",
+    "url": "https://www.npa.go.jp/publications/statistics/cybersecurity/index.html",
+    "fact": "警察庁の2025年情勢報告は国家との関係が疑われる集団による情報窃取活動を指摘している。"
+  },
+  {
+    "title": "国内サービスを止めるDDoSの社会的影響",
+    "date": "2026-11-24（確認日）",
+    "source": "警察庁",
+    "url": "https://www.npa.go.jp/publications/statistics/cybersecurity/index.html",
+    "fact": "警察庁は2024年末から2025年初めの重要サービスへの妨害被害を報告している。"
+  },
+  {
+    "title": "個人情報と不正ログインへの国内の懸念",
+    "date": "2026-11-24（確認日）",
+    "source": "IPA",
+    "url": "https://www.ipa.go.jp/security/10threats/10threats2026.html",
+    "fact": "IPAは2026年の個人向け脅威に情報窃取と不正ログインを挙げている。"
+  },
+  {
+    "title": "偽情報と詐欺が揺さぶる日本の信頼",
+    "date": "2026-11-24（確認日）",
+    "source": "IPA",
+    "url": "https://www.ipa.go.jp/pressrelease/2025/press20250910.html",
+    "fact": "IPAの白書2025はAIの悪用と認知領域への攻撃に懸念を示す。"
+  },
+  {
+    "title": "個人を狙う金融・決済詐欺",
+    "date": "2026-11-24（確認日）",
+    "source": "IPA",
+    "url": "https://www.ipa.go.jp/security/10threats/10threats2026.html",
+    "fact": "IPAの個人向け評価にはフィッシングや銀行・カードの不正利用が含まれる。"
+  },
+  {
+    "title": "現場の危機認識と対策のギャップ",
+    "date": "2026-11-24（確認日）",
+    "source": "警察庁",
+    "url": "https://www.npa.go.jp/bureau/cyber/pdf/R7countermeasures_leaflet.pdf",
+    "fact": "警察庁の企業調査資料では社外アクセス時にIDとパスワードのみを使う回答が39.8%だった。"
+  }
 ];
-newsEvidence.push({"title":"クラウドの機械ID侵害と復旧保護の重要性","date":"2026-09-25","source":"Microsoft Security Research","url":"https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/","fact":"侵害されたサービスプリンシパルによる破壊活動を報告。一部の独立した保護策は削除を阻止した。"},{"title":"Trivy供給網侵害と認証情報の回収","date":"2026-03-24","source":"Microsoft Defender Security Research","url":"https://www.microsoft.com/en-us/security/blog/2026/03/24/detecting-investigating-defending-against-trivy-supply-chain-compromise/","fact":"先行事件の不完全な対応と後続の供給網侵害を報告。"});
 export const scenarioBlueprints=[
-{id:'fi-01',title:'「障害が伝染する」より危険な未来──復旧操作が次の停止を生む社会',category:'可用性の反転',horizon:'2027–2030',ratings:{coupling:4,inversion:4,aftershock:4,autonomy:1,opacity:3,transition:2},confidence:'中',claim:'複数のシステムが連携する社会では、故障そのものより復旧の同期が新たな混雑と障害を生む。',blindspot:'復旧時間の短さだけを評価すると、再接続による負荷や業務の滞留を見逃す。',counter:'段階的再開、待ち行列の制御、代替手段の訓練で連鎖を弱められる。',watch:['復旧後に再び性能低下する事例','再接続集中を避ける運用設計の普及','システム復旧と業務正常化の時間差'],news:[0,1,2]},
-{id:'fi-02',title:'攻撃者がいない危機──「正常な変更」が国家的リスクになる時代',category:'変更の逆説',horizon:'2027–2032',ratings:{coupling:3,inversion:4,aftershock:2,autonomy:1,opacity:3,transition:2},confidence:'中',claim:'更新・保守・容量増強・構成変更の複合が、悪意ある攻撃に匹敵する業務停止を起こし得る。',blindspot:'攻撃の有無で重大度を分けると、社会機能の可用性リスクを過小評価する。',counter:'変更前の依存関係評価、段階的展開、戻せる設計、実環境に近い負荷試験が有効。',watch:['変更・保守に起因する重大障害の割合','変更後の障害検知までの時間','切り戻しの実効性'],news:[0,1,2]},
-{id:'fi-03',title:'AIが会社を壊すのではない──「誰も判断していない決定」が増える未来',category:'自律化の統治',horizon:'2027–2030',ratings:{coupling:2,inversion:3,aftershock:1,autonomy:4,opacity:2,transition:3},confidence:'中〜低',claim:'AIエージェントと自動化の連鎖が増えるほど、認証済み操作の責任と取り消し可能性が中心課題になる。',blindspot:'不正アクセスだけを監視すると、正規の権限で実行された誤った判断を区別しにくい。',counter:'操作の階層化、人間による重要操作承認、権限分離、監査ログ、実行取り消しが有効。',watch:['AIへの書き込み権限付与率','重要操作に対する承認・取り消し率','AI関連の誤操作や監査報告'],news:[1,3]}
-,
-{"id":"fi-04","title":"修正しても信頼は戻らない──機械IDの時代に生まれる「信頼復旧負債」","category":"信頼の復旧","horizon":"2027–2036","ratings":{"coupling":3,"inversion":2,"aftershock":3,"autonomy":3,"opacity":3,"transition":3},"confidence":"中・暫定","claim":"侵入経路の修正と既存権限の失効の時間差が、クラウド時代の復旧負債になる。","blindspot":"稼働率や修正率だけでは既存の信頼関係の健全性を測れない。","counter":"短命の認証情報、独立した復旧権限、失効の実測が普及し、修正後の二次被害が減少すれば仮説を弱める。","watch":["修正から旧権限の失効確認までの時間","機械IDの棚卸し率","独立した復旧試験の成功率"],"news":[4,5],"threatIds":["watch-20261124-apim","watch-20261124-glinet"]}
+  {
+    "id": "fi-jp-1",
+    "title": "復旧完了ではなく取引再開までが長期化する日本企業",
+    "category": "ランサムウェア",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 4,
+      "inversion": 3,
+      "aftershock": 4,
+      "autonomy": 1,
+      "opacity": 3,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "復旧完了ではなく取引再開までが長期化する日本企業という条件付き仮説。操業停止と顧客対応が同時に発生する場合、取引先にも負担が及ぶ。",
+    "blindspot": "操業停止と顧客対応が同時に発生する場合、取引先にも負担が及ぶ。",
+    "counter": "共同復旧訓練の普及と停止期間の短縮",
+    "watch": [
+      "業務正常化までの日数"
+    ],
+    "news": [
+      0
+    ],
+    "threatIds": [
+      "jp-watch-20261124-1"
+    ]
+  },
+  {
+    "id": "fi-jp-2",
+    "title": "委託先の復旧能力が取引条件になる未来",
+    "category": "サプライチェーン",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 4,
+      "inversion": 3,
+      "aftershock": 3,
+      "autonomy": 1,
+      "opacity": 3,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "委託先の復旧能力が取引条件になる未来という条件付き仮説。複数企業が同じ委託サービスを利用する場合には影響が相関する。",
+    "blindspot": "複数企業が同じ委託サービスを利用する場合には影響が相関する。",
+    "counter": "代替委託先の確保と共同監査の実効性",
+    "watch": [
+      "委託先起因の停止件数"
+    ],
+    "news": [
+      1
+    ],
+    "threatIds": [
+      "jp-watch-20261124-2"
+    ]
+  },
+  {
+    "id": "fi-jp-3",
+    "title": "AIの判断を取り消せる企業と取り消せない企業",
+    "category": "AI・サイバー",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 3,
+      "inversion": 3,
+      "aftershock": 2,
+      "autonomy": 4,
+      "opacity": 3,
+      "transition": 4
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "AIの判断を取り消せる企業と取り消せない企業という条件付き仮説。生成物の信頼性と業務権限の管理が同時に必要になる。",
+    "blindspot": "生成物の信頼性と業務権限の管理が同時に必要になる。",
+    "counter": "重要操作の承認と取り消し機能の普及",
+    "watch": [
+      "AI関連の誤操作報告"
+    ],
+    "news": [
+      2
+    ],
+    "threatIds": [
+      "jp-watch-20261124-3"
+    ]
+  },
+  {
+    "id": "fi-jp-4",
+    "title": "更新能力が取引継続性を左右する社会",
+    "category": "脆弱性",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 3,
+      "inversion": 3,
+      "aftershock": 3,
+      "autonomy": 1,
+      "opacity": 3,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "更新能力が取引継続性を左右する社会という条件付き仮説。保守の遅れが外部接続の安全性に影響する。",
+    "blindspot": "保守の遅れが外部接続の安全性に影響する。",
+    "counter": "更新遅延と侵害件数の継続的な減少",
+    "watch": [
+      "修正までの日数"
+    ],
+    "news": [
+      3
+    ],
+    "threatIds": [
+      "jp-watch-20261124-4"
+    ]
+  },
+  {
+    "id": "fi-jp-5",
+    "title": "機密情報の継続的な保護が産業競争力を左右する未来",
+    "category": "国家・APT",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 3,
+      "inversion": 2,
+      "aftershock": 3,
+      "autonomy": 1,
+      "opacity": 4,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "機密情報の継続的な保護が産業競争力を左右する未来という条件付き仮説。機密情報の保護と帰属判断には別々の証拠が必要。",
+    "blindspot": "機密情報の保護と帰属判断には別々の証拠が必要。",
+    "counter": "情報窃取の減少と検知能力の改善",
+    "watch": [
+      "国内の確認済み標的型事案"
+    ],
+    "news": [
+      4
+    ],
+    "threatIds": [
+      "jp-watch-20261124-5"
+    ]
+  },
+  {
+    "id": "fi-jp-6",
+    "title": "デジタルサービスの代替経路が社会の標準になる未来",
+    "category": "重要インフラ",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 4,
+      "inversion": 3,
+      "aftershock": 3,
+      "autonomy": 1,
+      "opacity": 2,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "デジタルサービスの代替経路が社会の標準になる未来という条件付き仮説。可用性の低下が利用者の生活や企業活動に及ぶ。",
+    "blindspot": "可用性の低下が利用者の生活や企業活動に及ぶ。",
+    "counter": "妨害時も代替サービスで業務継続できること",
+    "watch": [
+      "利用不能時間と代替利用率"
+    ],
+    "news": [
+      5
+    ],
+    "threatIds": [
+      "jp-watch-20261124-6"
+    ]
+  },
+  {
+    "id": "fi-jp-7",
+    "title": "本人確認の回復が生活再建の一部になる未来",
+    "category": "情報漏えい",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 3,
+      "inversion": 2,
+      "aftershock": 4,
+      "autonomy": 1,
+      "opacity": 3,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "本人確認の回復が生活再建の一部になる未来という条件付き仮説。個人の認証情報の再利用は複数サービスの被害につながり得る。",
+    "blindspot": "個人の認証情報の再利用は複数サービスの被害につながり得る。",
+    "counter": "耐フィッシング認証と迅速な救済の普及",
+    "watch": [
+      "アカウント回復に要する時間"
+    ],
+    "news": [
+      6
+    ],
+    "threatIds": [
+      "jp-watch-20261124-7"
+    ]
+  },
+  {
+    "id": "fi-jp-8",
+    "title": "情報の出所を確認できることが社会参加の条件になる未来",
+    "category": "AI・サイバー",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 3,
+      "inversion": 2,
+      "aftershock": 3,
+      "autonomy": 3,
+      "opacity": 4,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "情報の出所を確認できることが社会参加の条件になる未来という条件付き仮説。情報の真偽確認に要する負担が市民と組織に増える可能性がある。",
+    "blindspot": "情報の真偽確認に要する負担が市民と組織に増える可能性がある。",
+    "counter": "真正性確認の普及と詐欺被害の減少",
+    "watch": [
+      "偽情報関連の被害相談"
+    ],
+    "news": [
+      7
+    ],
+    "threatIds": [
+      "jp-watch-20261124-8"
+    ]
+  },
+  {
+    "id": "fi-jp-9",
+    "title": "金融サービスの安全評価が救済速度を重視する未来",
+    "category": "情報漏えい",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 3,
+      "inversion": 2,
+      "aftershock": 4,
+      "autonomy": 2,
+      "opacity": 3,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "金融サービスの安全評価が救済速度を重視する未来という条件付き仮説。被害後の資金回復と本人確認は生活上の負担となる。",
+    "blindspot": "被害後の資金回復と本人確認は生活上の負担となる。",
+    "counter": "不正送金の抑止と補償期間の短縮",
+    "watch": [
+      "被害額と救済期間"
+    ],
+    "news": [
+      8
+    ],
+    "threatIds": [
+      "jp-watch-20261124-9"
+    ]
+  },
+  {
+    "id": "fi-jp-10",
+    "title": "安全対策の運用負担が国内企業の格差を広げる未来",
+    "category": "脆弱性",
+    "horizon": "2027–2031",
+    "ratings": {
+      "coupling": 3,
+      "inversion": 3,
+      "aftershock": 3,
+      "autonomy": 1,
+      "opacity": 4,
+      "transition": 3
+    },
+    "confidence": "低〜中・暫定",
+    "claim": "安全対策の運用負担が国内企業の格差を広げる未来という条件付き仮説。対策の実施状況は現場の制約を考える材料だが、不安感そのものを測った値ではない。",
+    "blindspot": "対策の実施状況は現場の制約を考える材料だが、不安感そのものを測った値ではない。",
+    "counter": "中小企業の対策・支援利用率が改善すること",
+    "watch": [
+      "代表性のある不安調査と対策実施率"
+    ],
+    "news": [
+      9
+    ],
+    "threatIds": [
+      "jp-watch-20261124-10"
+    ]
+  }
 ];
