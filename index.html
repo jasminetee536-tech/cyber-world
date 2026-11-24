@@ -20,7 +20,8 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"CYBER WORLD","url":"https://cyber-world.jasminetee536.workers.dev/","inLanguage":"ja","description":"日本のサイバー脅威と重要インフラのリスクを公開情報に基づいて解説する情報サイト"}</script>
 </head>
 <body><div id="root"></div><script type="module" src="/src/main.jsx"></script><script type="module">
-const preferred=(navigator.languages?.[0]||navigator.language||'ja').toLowerCase();
+const override=new URLSearchParams(location.search).get('lang');
+const preferred=(['ja','en'].includes(override)?override:(navigator.languages?.[0]||navigator.language||'ja')).toLowerCase();
 if(!preferred.startsWith('ja')){
  const dictionary={'ホーム':'Home','メニュー':'Menu','脅威モニター':'Threat Monitor','未来予測':'Future Forecast','AI分析':'AI Analysis','サイバー図鑑':'Cyber Encyclopedia','日本インフラ':'Japan Infrastructure','重要インフラ':'Critical Infrastructure','事件年表':'Incident Timeline','情報基盤':'Intelligence Database','研究':'Research','情報連関分析':'Intelligence Correlation','分析レポート':'Analysis Reports','地政学・経済安全保障':'Geopolitics & Economic Security','災害分析':'Disaster Analysis','国家レジリエンス':'National Resilience','サイバー脅威':'Cyber Threats','AIリスク':'AI Risk','サイバー防御力':'Cyber Defense','復旧力':'Recovery Capacity','今週のキーワード':'Weekly Keywords','カテゴリー':'Category','すべてのカテゴリー':'All Categories','すべて':'All','採点詳細':'Scoring Details','未評価':'Not assessed','観測データ収集中':'Collecting evidence','閉じる':'Close','サイトを探索':'Explore the site'};
  const root=document.getElementById('root'), seen=new WeakMap(), cache=new Map();
