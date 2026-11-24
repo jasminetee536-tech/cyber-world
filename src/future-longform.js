@@ -1,4 +1,5 @@
-// Original long-form editorial forecasts. No feed article text is imported or republished.\nexport const futureLongform=[
+// Original long-form editorial forecasts. No feed article text is imported or republished.
+export const futureLongform=[
   {
     "id": "fi-01",
     "title": "復旧の逆流",
@@ -209,4 +210,4 @@
       }
     ]
   }
-];\n
+];
