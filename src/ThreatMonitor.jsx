@@ -1,6 +1,7 @@
 import {evaluateJCTI} from './jcti.js';
 import React,{useMemo,useState} from 'react';
 import {threatWatchArticles} from './threat-watch-articles.js';
+import PageUpdate from './PageUpdate.jsx';
 import './threat-monitor.css';
 const severityFor=score=>score==null?'unknown':score>=85?'critical':score>=70?'high':score>=50?'medium':score>=30?'low':'minimal';
 const levelFor=score=>score>=85?'CRITICAL':score>=70?'HIGH':score>=50?'MEDIUM':score>=30?'LOW':'MINIMAL';
@@ -15,7 +16,7 @@ export default function ThreatMonitor({shadow,shadowError}){
  const axisAverages=[0,1,2,3].map(i=>count?threatWatchArticles.reduce((sum,a)=>sum+(a.scoreAxes?.[i]||0),0)/count:0);
  const axisWeights=[35,25,25,15];
  return <main className="tm-page">
-  <header className="tm-heading"><div><small>JAPAN CYBER THREAT INTELLIGENCE</small><h1>脅威モニター</h1></div></header>
+  <header className="tm-heading"><div><small>JAPAN CYBER THREAT INTELLIGENCE</small><h1>脅威モニター</h1></div><PageUpdate page="脅威モニター" badge="BASELINE"/></header>
   <section className="tm-weekly-panel"><div className="tm-weekly-left"><small>JAPAN THREAT INTELLIGENCE</small><h2>THREAT INDEX</h2><div className="tm-weekly-metrics"><div className="tm-weekly-metric"><strong>{count}</strong><span>収録事象</span></div><div className="tm-weekly-metric"><strong>2026</strong><span>基準年</span></div></div></div><button type="button" className={'tm-weekly-gauge tm-text-'+severityFor(periodScore)} onClick={()=>setShowMethod(true)} aria-label="記事平均と国内脅威指数の評価方法を開く"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="55" fill="#091827" stroke="#38566a" strokeDasharray="1 4"/><circle cx="60" cy="60" r="57" className="cw-score-orbit" fill="none" stroke="#58dfff" strokeWidth="3" pathLength="100" strokeDasharray="12 88" opacity=".45" style={{filter:"blur(2px)"}}/><circle cx="60" cy="60" r="57" className="cw-score-orbit" fill="none" stroke="#79e8ff" strokeWidth="1.8" pathLength="100" strokeDasharray="12 88"/><circle cx="60" cy="60" r="51" fill="none" stroke="#39768f" strokeWidth=".7" strokeDasharray="1 4"/><circle cx="60" cy="60" r="46" fill="none" stroke="#263a4b" strokeWidth="3.5"/><circle cx="60" cy="60" r="46" fill="none" stroke="currentColor" strokeWidth="3.5" pathLength="100" strokeDasharray={`${periodScore??0} 100`} transform="rotate(-90 60 60)" strokeLinecap="round"/><text x="60" y="41" textAnchor="middle" fontSize="7" fill="#d3e5ee">JCTI SCORE</text><text x="60" y="71" textAnchor="middle" fontSize="29" fontWeight="bold" fill="currentColor">{periodScore??'—'}</text><text x="60" y="84" textAnchor="middle" fontSize="8" fill="#b3c9d8">/ 100</text></svg><span>{periodScore===null?'観測データ収集中':levelFor(periodScore)} · 採点詳細 ↗</span></button></section>
   <div className="tm-mission"><strong>日本国内の脅威を観測する。</strong><p>サイバー攻撃・脆弱性・システム障害を観測し、社会的な重大度と日本への関連性を整理します。点数は国内テーマ別の暫定重大度です。国家全体の脅威指数ではありません。</p></div>
   <div className="tm-category-toolbar"><div className="tm-category-field"><label htmlFor="tm-category">カテゴリー</label><select id="tm-category" value={filter} onChange={e=>setFilter(e.target.value)}>{filters.map(f=><option key={f} value={f}>{f==='すべて'?'すべてのカテゴリー':f}（{f==='すべて'?count:threatWatchArticles.filter(a=>a.category===f).length}件）</option>)}</select></div><span className="tm-category-count" aria-live="polite">{articles.length} / {count} 件</span></div>

@@ -1,9 +1,13 @@
 .cw-page-update {
+  position: absolute;
+  top: .3rem;
+  right: clamp(14px, 3vw, 58px);
+  z-index: 1;
+  pointer-events: none;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: .5rem;
-  padding: .7rem 0 0;
   color: #9ed7e7;
   font-size: .75rem;
   font-variant-numeric: tabular-nums;
