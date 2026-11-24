@@ -208,3 +208,22 @@
 @keyframes tmReportPulse{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
 @media(max-width:380px){.tm-events .tm-editorial-body{padding:12px}.tm-report-main{grid-template-columns:minmax(0,1fr) 72px;gap:10px}.tm-report-meter strong{height:72px;font-size:28px}.tm-events .tm-editorial-body h3{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.tm-events .tm-editorial-card:before,.tm-report-signal i{animation:none}}
+
+/* Threat identity: deep ocean intelligence, distinct from violet foresight. */
+.cw-app main.tm-page{background:radial-gradient(ellipse at 85% 0%,#12445b 0%,transparent 46%),linear-gradient(155deg,#0a1d30,#07111e 70%);color:#eaf5ff;border-radius:14px}
+.cw-app main.tm-page:before{background-image:repeating-radial-gradient(ellipse at 85% 0%,transparent 0 38px,#65ddff15 39px 40px,transparent 41px 68px);background-size:auto;pointer-events:none}
+.cw-app main.tm-page .tm-heading h1:before{background:#65ddff}
+.cw-app main.tm-page .tm-weekly-panel{background:radial-gradient(ellipse at 90% 0%,#1b4058,#0c1a2c 78%);border-color:#42677d;border-radius:14px;padding:20px;box-shadow:inset 0 1px #a2eaff20,0 8px 28px #0002}
+.cw-app main.tm-page .tm-weekly-panel:before{background:linear-gradient(90deg,transparent,#79e8ff);box-shadow:0 0 9px #79e8ff66}
+.cw-app main.tm-page .tm-weekly-metric{border-radius:8px;aspect-ratio:auto;min-height:56px;background:#0a1c2d99;border-color:#31566e;box-shadow:none}
+.cw-app main.tm-page .tm-mission{background:linear-gradient(100deg,#14364b99,#0b1a2c22);border-left-color:#65ddff}
+.cw-app main.tm-page .tm-category-toolbar{background:#0d2032;border-color:#31536b;border-radius:12px}
+.cw-app main.tm-page .tm-editorial-card{background:linear-gradient(135deg,#132c40,#0b192a 85%);border:1px solid #34566d;border-radius:14px;box-shadow:0 5px 18px #0002}
+.cw-app main.tm-page .tm-editorial-card:before{animation:none;width:100%;background:linear-gradient(90deg,var(--severity,#79e8ff),transparent 40%);opacity:.65}
+.cw-app main.tm-page .tm-editorial-body{padding:20px;gap:12px}
+.cw-app main.tm-page .tm-editorial-category{color:#8bd9ef;letter-spacing:.04em}
+.cw-app main.tm-page .tm-editorial-more{border-color:#31536b;color:#9ae5f7}
+.cw-app main.tm-page .tm-report-signal{opacity:.5}
+.cw-app main.tm-page .tm-editorial-card:hover{border-color:#65ddff}
+.cw-app main.tm-page .tm-article{background:linear-gradient(150deg,#102d43,#081725 75%);border-color:#42677d}
+@media(max-width:600px){.cw-app main.tm-page .tm-weekly-panel{padding:14px}.cw-app main.tm-page .tm-editorial-body{padding:15px}.cw-app main.tm-page .tm-report-main{grid-template-columns:minmax(0,1fr) 72px;gap:12px}.cw-app main.tm-page .tm-report-meter strong{height:72px;font-size:27px}.cw-app main.tm-page .tm-editorial-body h3{font-size:17px;line-height:1.6}}
