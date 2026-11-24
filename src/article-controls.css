@@ -61,3 +61,14 @@
 .cw-app .drawer:has(.cw-article-controls) {
   padding-top: 0;
 }
+
+@media (max-width: 600px) {
+  .cw-app .cw-main:has(> main.tm-page) {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  .cw-app .cw-main > main.tm-page {
+    padding-inline: 6px;
+  }
+}
