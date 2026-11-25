@@ -62,6 +62,24 @@
   padding-top: 0;
 }
 
+.cw-app main.tm-page .tm-article:has(> .tm-hero) > .cw-article-controls {
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.cw-app main.tm-page .tm-article:has(> .tm-hero) .cw-article-back {
+  align-self: flex-start;
+  flex: none;
+  min-width: 0;
+  min-height: 44px;
+  margin: 6px;
+  padding: 0 10px;
+  pointer-events: auto;
+}
+
 @media (max-width: 600px) {
   .cw-app .cw-main:has(> main.tm-page) {
     padding-left: env(safe-area-inset-left, 0px);
@@ -69,6 +87,18 @@
   }
 
   .cw-app .cw-main > main.tm-page {
-    padding-inline: 6px;
+    padding-inline: 12px;
+  }
+
+  .cw-app main.tm-page .tm-overlay:has(> .tm-article > .tm-hero) {
+    padding: max(6px, env(safe-area-inset-top))
+      max(4px, env(safe-area-inset-right))
+      max(6px, env(safe-area-inset-bottom))
+      max(4px, env(safe-area-inset-left)) !important;
+  }
+
+  .cw-app main.tm-page .tm-overlay > .tm-article:has(> .tm-hero) {
+    box-sizing: border-box;
+    height: 100%;
   }
 }
