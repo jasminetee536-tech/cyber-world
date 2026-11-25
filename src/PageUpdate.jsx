@@ -45,10 +45,6 @@ export default function PageUpdate({ page, reviewDates = [], badge }) {
   const displayedDate = date ?? siteDate;
   if (!displayedDate) return null;
   const formatted = displayedDate.replaceAll('-', '.');
-  if (badge) return <span className="tm-status"><time dateTime={displayedDate} title="更新日">{formatted}</time> / {badge}</span>;
-
-  return <div className="cw-page-update">
-    <span>{date ? '更新日' : 'サイト更新日'}</span>
-    <time dateTime={displayedDate}>{formatted}</time>
-  </div>;
+  const status = <span className="tm-status"><time dateTime={displayedDate} title="更新日">{formatted}</time> / BASELINE</span>;
+  return badge ? status : <div className="cw-page-update">{status}</div>;
 }
