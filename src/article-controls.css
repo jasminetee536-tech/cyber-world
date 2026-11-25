@@ -102,3 +102,31 @@
     height: 100%;
   }
 }
+
+/* Extend page backgrounds to the viewport without changing content widths. */
+.cw-app .cw-main > :is(.tm-page,.cw-fi,.ic-page) {
+  position: relative;
+  border-radius: 0;
+  background: none;
+}
+.cw-app .cw-main > :is(.tm-page,.cw-fi,.ic-page)::before {
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  mask-image: none;
+  background-color: var(--cw-page-base, #031625);
+  background-image: var(--cw-page-pattern, repeating-radial-gradient(ellipse at 85% 0%,transparent 0 38px,#65ddff15 39px 40px,transparent 41px 68px)), var(--cw-page-gradient, radial-gradient(ellipse at 85% 0%,#12445b 0%,transparent 46%),linear-gradient(155deg,#0a1d30,#07111e 70%));
+  background-size: auto;
+}
+.cw-app .cw-main > .cw-fi-monitor {
+  --cw-page-base: #0b1429;
+  --cw-page-pattern: repeating-radial-gradient(ellipse at 85% 0%,transparent 0 38px,#a99cff20 39px 40px,transparent 41px 68px);
+  --cw-page-gradient: radial-gradient(ellipse at 85% 0%,#33265a 0%,transparent 45%);
+}
+.cw-app .cw-main > .cw-ai-monitor {
+  --cw-page-base: #071c23;
+  --cw-page-pattern: radial-gradient(circle,#66e9bc38 1px,transparent 1.5px),linear-gradient(60deg,transparent 48%,#66e9bc12 49%,transparent 51%);
+  --cw-page-gradient: radial-gradient(ellipse at 80% 0%,#12483e,transparent 48%);
+}
+.cw-app .cw-main > .cw-ai-monitor::before { background-size:24px 24px,48px 48px,auto; }
+.cw-app .cw-main > .ic-page { --cw-page-base:#050b14; --cw-page-pattern: none; --cw-page-gradient:radial-gradient(ellipse at 50% 15%,#0b2538,#050b14 55%); }
+.cw-app .cw-main > .ic-page::before { content:''; position:absolute; top:0; bottom:0; z-index:-1; pointer-events:none; }
