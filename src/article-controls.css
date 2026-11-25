@@ -128,3 +128,17 @@
 .cw-app .cw-main > .cw-ai-monitor::before { background-size:24px 24px,48px 48px,auto; }
 .cw-app .cw-main > .ic-page { --cw-page-base:#050b14; --cw-page-pattern: none; --cw-page-gradient:radial-gradient(ellipse at 50% 15%,#0b2538,#050b14 55%); }
 .cw-app .cw-main > .ic-page::before { content:''; position:absolute; top:0; bottom:0; z-index:-1; pointer-events:none; }
+
+/* Match the threat report reader controls and publication metadata. */
+.cw-app .cw-fi-reader-overlay { justify-content:center; }
+.cw-app .cw-fi-reader-drawer { box-sizing:border-box; width:100%; max-width:760px; padding:0 0 24px; }
+.cw-app .cw-fi-reader-drawer > :not(.cw-article-controls) { margin-inline:24px; }
+.cw-app .cw-fi-reader-drawer > .cw-article-controls { height:0; padding:0; border:0; background:transparent; pointer-events:none; }
+.cw-app .cw-fi-reader-drawer .cw-article-back { align-self:flex-start; flex:none; min-width:0; min-height:44px; margin:6px; padding:0 10px; pointer-events:auto; }
+.cw-app .cw-fi-reader-drawer > .cw-kicker { padding-top:58px; }
+.cw-app .cw-fi-publication { display:flex; justify-content:space-between; align-items:center; gap:8px; color:#a9c3d2; font-size:11px; letter-spacing:.06em; margin-bottom:8px; }
+.cw-app .cw-fi-publication time { font-size:12px; white-space:nowrap; color:#a9c3d2; }
+@media(max-width:600px){
+ .cw-app .cw-fi-reader-overlay { padding:max(6px,env(safe-area-inset-top)) max(4px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(4px,env(safe-area-inset-left)) !important; }
+ .cw-app .cw-fi-reader-drawer > :not(.cw-article-controls) { margin-inline:18px; }
+}
