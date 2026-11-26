@@ -337,3 +337,5 @@ body:has(.tm-page) .tm-page:before{content:"";position:fixed;inset:0;width:auto;
 .tm-page .cw-flat-map svg{width:100%;height:auto;aspect-ratio:720/320;max-height:none;display:block}
 .tm-page .cw-history-chart{width:100%;height:auto;aspect-ratio:600/350;max-height:none;display:block;margin:12px 0}
 .cw-cockpit-stage{min-width:0;max-width:100%}
+
+.cw-cockpit-grid.cw-no-map{display:block;width:100%}.cw-no-map .cw-cockpit-stage{width:100%}
