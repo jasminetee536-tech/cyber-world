@@ -290,7 +290,7 @@
 
 /* Full-bleed background, inset content. */
 .tm-page{box-sizing:border-box;width:100%;max-width:1100px;padding-inline:clamp(18px,4vw,36px);position:relative;isolation:isolate;background:transparent}
-.tm-page:before{content:"";position:absolute;inset:0;left:50%;width:100vw;transform:translateX(-50%);background:#031625;z-index:-1;pointer-events:none}
+.tm-page:before{content:none}
 .cw-dual-gauges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0 24px;text-align:center}
 .cw-dual-gauges>div{min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px}
 .cw-dual-gauges>div>small{font-size:12px;color:#b3c9d8;line-height:1.5}
@@ -299,3 +299,17 @@
 .cw-dual-gauges .tm-weekly-gauge:disabled{opacity:1;cursor:default}
 .cw-dual-gauges .tm-weekly-gauge span{font-size:11px}
 @media(max-width:760px){.tm-page{padding-inline:18px!important}.cw-cockpit,.cw-cockpit.cw-independent{width:100%!important;margin-left:0!important;margin-right:0!important}.cw-dual-gauges{gap:12px}.cw-dual-gauges .tm-weekly-gauge{max-width:170px}}
+
+/* Unified cinematic grid, no split background layer. */
+.tm-page{background:transparent!important;isolation:auto}
+body:has(.tm-page){background:#04121f!important}
+body:has(.tm-page) .tm-page{background-image:none!important}
+body:has(.tm-page) .tm-page:before{content:"";position:fixed;inset:0;width:auto;transform:none;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 12%,#0b3549 0%,transparent 55%),linear-gradient(#36c8ef0c 1px,transparent 1px),linear-gradient(90deg,#36c8ef0c 1px,transparent 1px),#04121f;background-size:auto,32px 32px,32px 32px,auto}
+.cw-dual-gauges{gap:10px;margin:12px 0 18px}
+.cw-dual-gauges .tm-weekly-gauge{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);align-items:center;gap:6px;max-width:none!important;padding:9px!important;border:1px solid #286078!important;background:linear-gradient(125deg,#0c293b,#071522)!important;border-radius:5px!important;text-align:left;box-shadow:inset 0 1px #51dfff33}
+.cw-dual-gauges .tm-weekly-gauge svg{max-width:112px;margin:auto}
+.cw-index-copy{display:grid;gap:3px;min-width:0}
+.cw-index-copy small{font-size:10px;color:#b3c9d8;line-height:1.3}
+.cw-index-copy strong{font-size:15px;color:#d9f5ff;letter-spacing:1px}
+.cw-index-copy span{font-size:11px;color:inherit}
+@media(max-width:760px){.cw-dual-gauges .tm-weekly-gauge{padding:6px!important;gap:4px}.cw-dual-gauges .tm-weekly-gauge svg{max-width:86px}.cw-index-copy strong{font-size:13px}.cw-index-copy small{font-size:9px}}
