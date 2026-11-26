@@ -313,3 +313,22 @@ body:has(.tm-page) .tm-page:before{content:"";position:fixed;inset:0;width:auto;
 .cw-index-copy strong{font-size:15px;color:#d9f5ff;letter-spacing:1px}
 .cw-index-copy span{font-size:11px;color:inherit}
 @media(max-width:760px){.cw-dual-gauges .tm-weekly-gauge{padding:6px!important;gap:4px}.cw-dual-gauges .tm-weekly-gauge svg{max-width:86px}.cw-index-copy strong{font-size:13px}.cw-index-copy small{font-size:9px}}
+
+/* Accessible touch controls and consistent HUD form styling. */
+.tm-page{color-scheme:dark}
+.tm-page button:not(.tm-weekly-gauge),.tm-page select,.tm-page input{box-sizing:border-box;min-height:44px;font-size:14px;line-height:1.45}
+.tm-page select,.tm-page input,.cw-detail-open,.cw-detail-close,.cw-cockpit button:not([aria-pressed]):not(.tm-weekly-gauge):not(.cw-ob-event){background:#0a2233;color:#d7f2ff;border:1px solid #38677e;border-radius:7px;padding:10px 14px}
+.tm-page select{appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%237ceaff' stroke-width='1.7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.tm-page button:focus-visible,.tm-page select:focus-visible,.tm-page input:focus-visible{outline:2px solid #78eaff;outline-offset:3px}
+.tm-page button:disabled{opacity:.5}.tm-page .tm-weekly-gauge:disabled{opacity:1}
+.cw-cockpit button[aria-pressed]{min-height:44px;padding:10px 12px!important;font-size:14px!important}
+.cw-cockpit-stage>div[style*="flex"],.cw-matrix-tabs{gap:12px!important;margin-block:14px}
+.cw-cockpit-stage>small{display:block;font-size:13px;line-height:1.6;margin:12px 0}
+.cw-flat-map{margin:12px 0 18px}
+.cw-flat-map svg{height:clamp(280px,44vw,460px)}
+.cw-flat-map select{margin-top:14px;min-width:150px}
+.cw-history-chart{display:block;height:clamp(300px,42vw,440px);margin:16px 0;overflow:visible}
+.cw-detail-open{margin:18px 0!important;width:100%;text-align:center}
+.cw-ob-grid{gap:12px!important}.cw-ob{gap:18px}.cw-matrix td button{min-width:44px}
+.cw-independent{margin-block:30px!important}.cw-cockpit-detail button+button,.cw-independent>button+button,.cw-ob>button+button{margin-left:10px}
+@media(max-width:760px){.tm-page select,.tm-page input{font-size:16px}.cw-flat-map svg{height:290px}.cw-history-chart{height:320px}.cw-cockpit-stage>small{font-size:13px}.cw-cockpit button[aria-pressed]{font-size:13px!important}.cw-dual-gauges{margin-bottom:22px}}
