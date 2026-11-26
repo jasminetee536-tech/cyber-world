@@ -227,3 +227,13 @@
 .cw-app main.tm-page .tm-editorial-card:hover{border-color:#65ddff}
 .cw-app main.tm-page .tm-article{background:linear-gradient(150deg,#102d43,#081725 75%);border-color:#42677d}
 @media(max-width:600px){.cw-app main.tm-page .tm-weekly-panel{padding:14px}.cw-app main.tm-page .tm-editorial-body{padding:15px}.cw-app main.tm-page .tm-report-main{grid-template-columns:minmax(0,1fr) 72px;gap:12px}.cw-app main.tm-page .tm-report-meter strong{height:72px;font-size:27px}.cw-app main.tm-page .tm-editorial-body h3{font-size:17px;line-height:1.6}}
+
+.cw-cockpit-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:10px;align-items:start}
+.cw-cockpit-stage,.cw-cockpit-detail{max-height:520px;overflow:auto;overscroll-behavior:contain}
+.cw-matrix-tabs{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
+.cw-matrix-scroll{overflow:auto}
+.cw-matrix{width:100%;border-spacing:4px;font-size:12px}
+.cw-matrix th{font-weight:500;white-space:nowrap;text-align:left}
+.cw-matrix td button{width:100%;min-width:38px;padding:8px;color:#cfe5f5;border:1px solid #34536b;border-radius:4px}
+.cw-detail-open,.cw-detail-close{display:none}
+@media(max-width:760px){.cw-cockpit-grid{display:block}.cw-cockpit-stage{max-height:55dvh}.cw-cockpit-detail{display:none}.cw-cockpit-detail.is-open{display:block;position:fixed;bottom:0;left:0;right:0;z-index:80;max-height:65dvh;box-shadow:0 -12px 40px #0009;overflow:auto}.cw-detail-open,.cw-detail-close{display:block;margin:8px 0}.cw-detail-close{margin-left:auto}}
