@@ -360,3 +360,8 @@ body:has(.tm-page) .tm-page:before{content:"";position:fixed;inset:0;width:auto;
 .tm-page .cw-matrix.cw-matrix-time th:first-child{width:9%!important;padding-right:2px}
 .tm-page .cw-matrix.cw-matrix-time thead th{white-space:nowrap!important;overflow-wrap:normal!important;font-size:clamp(9px,2.65vw,13px);letter-spacing:-.25px}
 .tm-page .cw-matrix.cw-matrix-time{border-spacing:2px}
+
+/* Short industry and infrastructure labels need less column space. */
+.tm-page .cw-matrix:is(.cw-matrix-sector,.cw-matrix-infra) th:first-child{width:19%!important;padding-right:3px;white-space:nowrap!important;overflow-wrap:normal!important}
+.tm-page .cw-matrix:is(.cw-matrix-sector,.cw-matrix-infra) thead th{white-space:nowrap!important;overflow-wrap:normal!important}
+.tm-page .cw-matrix:is(.cw-matrix-sector,.cw-matrix-infra) tbody th{font-size:clamp(10px,2.8vw,13px);letter-spacing:0}
