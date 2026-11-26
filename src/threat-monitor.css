@@ -339,3 +339,5 @@ body:has(.tm-page) .tm-page:before{content:"";position:fixed;inset:0;width:auto;
 .cw-cockpit-stage{min-width:0;max-width:100%}
 
 .cw-cockpit-grid.cw-no-map{display:block;width:100%}.cw-no-map .cw-cockpit-stage{width:100%}
+
+.cw-comparison-tab .cw-hud-axes{display:block;text-align:center}.cw-comparison-tab .cw-hud-axes svg{width:100%;max-width:540px;height:auto;max-height:340px;display:block;margin:auto}.cw-comparison-tab .cw-hud-axes>div{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}.cw-comparison-tab .cw-hud-axes strong{font-size:18px}.cw-comparison-tab>button{font-size:12px;line-height:1.4}
