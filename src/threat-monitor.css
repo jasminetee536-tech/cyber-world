@@ -287,3 +287,15 @@
 .cw-flat-map{width:100%;touch-action:pan-y;overflow:hidden;border-radius:8px}.cw-flat-map select{margin-top:8px;background:#0b1828;color:#c5e8f5;border:1px solid #34536b;padding:6px}
 .cw-independent .cw-hud-axes{display:block;text-align:center}.cw-independent .cw-hud-axes svg{width:100%;max-width:540px;height:auto;max-height:390px;display:block;margin:auto}.cw-independent .cw-hud-axes>div{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}.cw-independent .cw-hud-axes strong{font-size:18px}.cw-independent>button{font-size:12px;line-height:1.35}
 @media(max-width:760px){.cw-cockpit,.cw-cockpit.cw-independent{width:calc(100% + 16px);margin-left:-8px!important;margin-right:-8px!important}.cw-cockpit-stage{width:100%;min-width:0}.cw-cockpit-stage>small{font-size:11px}.cw-cockpit button[aria-pressed]{font-size:12px;padding:7px 8px!important}.cw-independent .cw-hud-axes svg{max-height:340px}.cw-independent>button{font-size:11px}.cw-cockpit-detail:not(.is-open){display:none!important}}
+
+/* Full-bleed background, inset content. */
+.tm-page{box-sizing:border-box;width:100%;max-width:1100px;padding-inline:clamp(18px,4vw,36px);position:relative;isolation:isolate;background:transparent}
+.tm-page:before{content:"";position:absolute;inset:0;left:50%;width:100vw;transform:translateX(-50%);background:#031625;z-index:-1;pointer-events:none}
+.cw-dual-gauges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0 24px;text-align:center}
+.cw-dual-gauges>div{min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.cw-dual-gauges>div>small{font-size:12px;color:#b3c9d8;line-height:1.5}
+.cw-dual-gauges .tm-weekly-gauge{width:100%;max-width:210px;min-width:0;margin:0 auto;padding:0;background:none;border:0}
+.cw-dual-gauges .tm-weekly-gauge svg{width:100%;height:auto;display:block}
+.cw-dual-gauges .tm-weekly-gauge:disabled{opacity:1;cursor:default}
+.cw-dual-gauges .tm-weekly-gauge span{font-size:11px}
+@media(max-width:760px){.tm-page{padding-inline:18px!important}.cw-cockpit,.cw-cockpit.cw-independent{width:100%!important;margin-left:0!important;margin-right:0!important}.cw-dual-gauges{gap:12px}.cw-dual-gauges .tm-weekly-gauge{max-width:170px}}
