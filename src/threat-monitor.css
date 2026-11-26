@@ -332,3 +332,8 @@ body:has(.tm-page) .tm-page:before{content:"";position:fixed;inset:0;width:auto;
 .cw-ob-grid{gap:12px!important}.cw-ob{gap:18px}.cw-matrix td button{min-width:44px}
 .cw-independent{margin-block:30px!important}.cw-cockpit-detail button+button,.cw-independent>button+button,.cw-ob>button+button{margin-left:10px}
 @media(max-width:760px){.tm-page select,.tm-page input{font-size:16px}.cw-flat-map svg{height:290px}.cw-history-chart{height:320px}.cw-cockpit-stage>small{font-size:13px}.cw-cockpit button[aria-pressed]{font-size:13px!important}.cw-dual-gauges{margin-bottom:22px}}
+
+/* Responsive landscape graphics: intrinsic aspect ratios, no forced stretching. */
+.tm-page .cw-flat-map svg{width:100%;height:auto;aspect-ratio:720/320;max-height:none;display:block}
+.tm-page .cw-history-chart{width:100%;height:auto;aspect-ratio:600/350;max-height:none;display:block;margin:12px 0}
+.cw-cockpit-stage{min-width:0;max-width:100%}
